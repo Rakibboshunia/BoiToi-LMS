@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Plus, Trash2, Save, ArrowLeft } from 'lucide-react';
+import toast from 'react-hot-toast';
 
 const CreateQuiz: React.FC = () => {
   const navigate = useNavigate();
@@ -37,7 +38,7 @@ const CreateQuiz: React.FC = () => {
   const handleSave = (e: React.FormEvent) => {
     e.preventDefault();
     // In a real app, this would submit the payload to the backend via createQuiz API
-    alert('Quiz saved successfully! (Demo)');
+    toast.success('Quiz saved successfully! (Demo)');
     navigate('/teacher/courses');
   };
 

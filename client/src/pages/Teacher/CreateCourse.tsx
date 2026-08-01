@@ -29,7 +29,8 @@ const CreateCourse: React.FC = () => {
     watch,
     formState: { errors, isSubmitting },
   } = useForm<CourseFormValues>({
-    resolver: zodResolver(courseSchema),
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    resolver: zodResolver(courseSchema) as any,
     defaultValues: {
       level: 'beginner',
       price: 0,
@@ -75,7 +76,7 @@ const CreateCourse: React.FC = () => {
         </div>
       )}
 
-      <form onSubmit={handleSubmit(onSubmit)} className="bg-background border border-border rounded-xl shadow-sm p-6 space-y-6">
+      <form onSubmit={handleSubmit(onSubmit as any)} className="bg-background border border-border rounded-xl shadow-sm p-6 space-y-6">
         
         <div className="space-y-4">
           <h3 className="text-lg font-semibold border-b border-border pb-2">Basic Information</h3>

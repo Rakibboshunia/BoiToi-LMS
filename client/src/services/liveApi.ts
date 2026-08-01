@@ -10,7 +10,9 @@ export const scheduleLiveClass = async (liveData: any) => {
   return response.data;
 };
 
-export const updateLiveStatus = async (id: string, status: string) => {
-  const response = await api.put(`/live/${id}/status`, { status });
+export const updateLiveStatus = async (id: string, status: string, recordingUrl?: string) => {
+  const payload: any = { status };
+  if (recordingUrl) payload.recordingUrl = recordingUrl;
+  const response = await api.put(`/live/${id}/status`, payload);
   return response.data;
 };
