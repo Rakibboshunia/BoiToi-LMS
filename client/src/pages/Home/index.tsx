@@ -225,13 +225,26 @@ const Home: React.FC = () => {
                 </Link>
               </div>
 
-              <div className="mt-12 flex items-center gap-6 text-sm text-slate-400 font-medium">
-                <div className="flex items-center gap-2">
-                  <CheckCircle size={16} className="text-indigo-400" /> No credit card required
-                </div>
-                <div className="flex items-center gap-2">
-                  <CheckCircle size={16} className="text-indigo-400" /> 14-day free trial
-                </div>
+              {/* Stats */}
+              <div className="mt-12 grid grid-cols-2 sm:grid-cols-4 gap-4">
+                {[
+                  { value: '12M+', label: 'Students', color: '#818cf8' },
+                  { value: '10K+', label: 'Courses', color: '#a78bfa' },
+                  { value: '500+', label: 'Instructors', color: '#60a5fa' },
+                  { value: '4.8★', label: 'Avg Rating', color: '#fbbf24' },
+                ].map((stat, i) => (
+                  <motion.div
+                    key={i}
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.5 + i * 0.1 }}
+                    className="flex flex-col items-center sm:items-start p-3 rounded-2xl"
+                    style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.08)' }}
+                  >
+                    <span className="text-2xl font-extrabold" style={{ color: stat.color }}>{stat.value}</span>
+                    <span className="text-xs text-slate-400 mt-0.5 font-medium">{stat.label}</span>
+                  </motion.div>
+                ))}
               </div>
             </motion.div>
 
@@ -283,17 +296,73 @@ const Home: React.FC = () => {
           </div>
         </section>
 
-        {/* 3. Trusted By */}
-        <section className="border-y border-white/5 bg-white/[0.02] py-10 mb-32 flex justify-center">
-          <div className="max-w-7xl px-6 w-full text-center">
-            <p className="text-sm font-medium text-slate-400 mb-8 uppercase tracking-widest">Trusted by over 10,000 companies around the world</p>
-            <div className="flex flex-wrap justify-center items-center gap-12 md:gap-24 opacity-50 grayscale hover:grayscale-0 transition-all duration-500">
-              <div className="font-bold text-2xl font-serif">Google</div>
-              <div className="font-bold text-2xl tracking-tighter">Microsoft</div>
-              <div className="font-bold text-2xl italic">Amazon</div>
-              <div className="font-bold text-2xl tracking-widest">NETFLIX</div>
-              <div className="font-bold text-2xl font-mono">Spotify</div>
-            </div>
+        {/* 3. Trusted By — Animated Marquee */}
+        <section className="border-y border-white/5 py-12 mb-32 overflow-hidden relative">
+          <div className="absolute inset-0 bg-gradient-to-r from-[#0a0a0e] via-transparent to-[#0a0a0e] z-10 pointer-events-none" />
+          <p className="text-center text-xs font-semibold text-slate-500 mb-8 uppercase tracking-widest px-6">
+            Trusted by learners from top companies worldwide
+          </p>
+          {/* Marquee Row 1 */}
+          <div className="flex gap-10 animate-marquee whitespace-nowrap w-max mb-4">
+            {[
+              { name: 'Google', color: '#4285F4' },
+              { name: 'Microsoft', color: '#00BCF2' },
+              { name: 'Amazon', color: '#FF9900' },
+              { name: 'Netflix', color: '#E50914' },
+              { name: 'Spotify', color: '#1DB954' },
+              { name: 'Meta', color: '#0668E1' },
+              { name: 'Apple', color: '#A2AAAD' },
+              { name: 'Twitter / X', color: '#ffffff' },
+              { name: 'Stripe', color: '#635BFF' },
+              { name: 'Figma', color: '#F24E1E' },
+              { name: 'Google', color: '#4285F4' },
+              { name: 'Microsoft', color: '#00BCF2' },
+              { name: 'Amazon', color: '#FF9900' },
+              { name: 'Netflix', color: '#E50914' },
+              { name: 'Spotify', color: '#1DB954' },
+              { name: 'Meta', color: '#0668E1' },
+              { name: 'Apple', color: '#A2AAAD' },
+              { name: 'Twitter / X', color: '#ffffff' },
+              { name: 'Stripe', color: '#635BFF' },
+              { name: 'Figma', color: '#F24E1E' },
+            ].map((co, i) => (
+              <div key={i} className="flex items-center gap-3 px-6 py-3 rounded-2xl"
+                style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.07)' }}>
+                <div className="w-2 h-2 rounded-full" style={{ background: co.color, boxShadow: `0 0 8px ${co.color}` }} />
+                <span className="text-base font-bold text-white/60 tracking-tight">{co.name}</span>
+              </div>
+            ))}
+          </div>
+          {/* Marquee Row 2 — reverse */}
+          <div className="flex gap-10 animate-marquee-reverse whitespace-nowrap w-max">
+            {[
+              { name: 'Vercel', color: '#fff' },
+              { name: 'Airbnb', color: '#FF5A5F' },
+              { name: 'Uber', color: '#276EF1' },
+              { name: 'LinkedIn', color: '#0A66C2' },
+              { name: 'Dropbox', color: '#0061FF' },
+              { name: 'Slack', color: '#4A154B' },
+              { name: 'GitHub', color: '#ffffff' },
+              { name: 'OpenAI', color: '#10A37F' },
+              { name: 'Adobe', color: '#FA0F00' },
+              { name: 'Oracle', color: '#C74634' },
+              { name: 'Vercel', color: '#fff' },
+              { name: 'Airbnb', color: '#FF5A5F' },
+              { name: 'Uber', color: '#276EF1' },
+              { name: 'LinkedIn', color: '#0A66C2' },
+              { name: 'Dropbox', color: '#0061FF' },
+              { name: 'Slack', color: '#4A154B' },
+              { name: 'GitHub', color: '#ffffff' },
+              { name: 'OpenAI', color: '#10A37F' },
+              { name: 'Adobe', color: '#FA0F00' },
+              { name: 'Oracle', color: '#C74634' },
+            ].map((co, i) => (
+              <div key={i} className="flex items-center gap-3 px-6 py-3 rounded-2xl"
+                style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.07)' }}>
+                <div className="w-2 h-2 rounded-full" style={{ background: co.color, boxShadow: `0 0 8px ${co.color}` }} />
+                <span className="text-base font-bold text-white/60 tracking-tight">{co.name}</span>
+              </div>
+            ))}
           </div>
         </section>
 
@@ -489,41 +558,187 @@ const Home: React.FC = () => {
           </div>
         </section>
 
-        {/* 8. Testimonials */}
-        <section className="max-w-7xl mx-auto px-6 mb-20 flex flex-col items-center">
-          <div className="text-center mb-16 max-w-2xl">
-            <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">What Our Students Say</h2>
-            <p className="text-slate-400 text-lg">Discover how BoiToi has transformed the careers and lives of thousands of learners worldwide.</p>
+        {/* 8. How It Works */}
+        <section className="max-w-7xl mx-auto px-6 mb-32">
+          <div className="text-center mb-16">
+            <span className="inline-block px-4 py-1.5 rounded-full text-xs font-semibold uppercase tracking-widest bg-indigo-500/10 text-indigo-400 border border-indigo-500/20 mb-4">Simple Process</span>
+            <h2 className="text-3xl md:text-5xl font-bold text-white mb-4">How BoiToi Works</h2>
+            <p className="text-slate-400 text-lg max-w-xl mx-auto">Get started in minutes. No prior experience needed.</p>
           </div>
+          <div className="grid md:grid-cols-3 gap-8 relative">
+            {/* Connector Line */}
+            <div className="hidden md:block absolute top-14 left-[calc(16.67%+1rem)] right-[calc(16.67%+1rem)] h-px" style={{ background: 'linear-gradient(90deg, transparent, rgba(129,140,248,0.4), rgba(167,139,250,0.4), transparent)' }} />
+            {[
+              { step: '01', title: 'Create Your Account', desc: 'Sign up for free in seconds. No credit card required. Choose your role — student or instructor.', icon: '✍️', color: 'from-indigo-500 to-blue-500' },
+              { step: '02', title: 'Find Your Course', desc: 'Browse 10,000+ expert-led software courses. Filter by skill level, topic, or instructor rating.', icon: '🔍', color: 'from-purple-500 to-indigo-500' },
+              { step: '03', title: 'Start Learning', desc: 'Learn at your own pace with HD videos, live sessions, quizzes, and get a certificate upon completion.', icon: '🚀', color: 'from-pink-500 to-purple-500' },
+            ].map((s, i) => (
+              <motion.div
+                key={i}
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: i * 0.15 }}
+                className="relative flex flex-col items-center text-center p-8 rounded-3xl group"
+                style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.08)' }}
+              >
+                <div className={`w-20 h-20 rounded-2xl bg-gradient-to-br ${s.color} flex items-center justify-center text-4xl mb-6 shadow-lg group-hover:scale-110 transition-transform`}>
+                  {s.icon}
+                </div>
+                <div className="absolute -top-3 -right-3 w-8 h-8 rounded-full flex items-center justify-center text-xs font-black text-white" style={{ background: 'linear-gradient(135deg,#818cf8,#a78bfa)' }}>{s.step}</div>
+                <h3 className="text-xl font-bold text-white mb-3">{s.title}</h3>
+                <p className="text-slate-400 leading-relaxed text-sm">{s.desc}</p>
+              </motion.div>
+            ))}
+          </div>
+        </section>
 
-          <div className="grid md:grid-cols-3 gap-6 w-full">
-            {testimonials.map((test, i) => (
-              <motion.div 
-                initial={{ opacity: 0, scale: 0.95 }}
-                whileInView={{ opacity: 1, scale: 1 }}
+        {/* 9. Top Instructors */}
+        <section className="max-w-7xl mx-auto px-6 mb-32">
+          <div className="flex flex-col md:flex-row md:items-end justify-between mb-12 gap-6">
+            <div>
+              <span className="inline-block px-4 py-1.5 rounded-full text-xs font-semibold uppercase tracking-widest bg-purple-500/10 text-purple-400 border border-purple-500/20 mb-4">Expert Teachers</span>
+              <h2 className="text-3xl md:text-4xl font-bold text-white mb-2">Learn From The Best</h2>
+              <p className="text-slate-400">Hand-picked instructors with real-world software industry experience.</p>
+            </div>
+            <Link to="/courses" className="inline-flex items-center gap-2 text-indigo-400 font-medium hover:text-indigo-300 transition-colors group shrink-0">
+              View all instructors <ArrowRight size={16} className="group-hover:translate-x-1 transition-transform" />
+            </Link>
+          </div>
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+            {[
+              { name: 'Aryan Khan', role: 'React & Next.js Expert', courses: 12, students: '32k', rating: 4.9, img: 'https://i.pravatar.cc/200?img=11', badge: '🏆 Top Instructor' },
+              { name: 'Priya Sharma', role: 'Data Science & AI Lead', courses: 8, students: '28k', rating: 4.8, img: 'https://i.pravatar.cc/200?img=5', badge: '⭐ Most Popular' },
+              { name: 'James Lee', role: 'DevOps & Cloud Architect', courses: 15, students: '41k', rating: 4.9, img: 'https://i.pravatar.cc/200?img=12', badge: '🔥 Trending' },
+              { name: 'Sara Ahmed', role: 'Cybersecurity Expert', courses: 6, students: '19k', rating: 4.7, img: 'https://i.pravatar.cc/200?img=9', badge: '✅ Verified' },
+            ].map((ins, i) => (
+              <motion.div
+                key={i}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ delay: i * 0.1 }}
-                key={i}
-                className="bg-white/5 border border-white/10 p-8 rounded-3xl flex flex-col relative"
+                className="group flex flex-col items-center text-center p-6 rounded-3xl cursor-pointer hover:-translate-y-1 transition-all duration-300"
+                style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.08)' }}
               >
-                <div className="text-6xl text-indigo-500/20 absolute top-4 left-6 font-serif">"</div>
-                <div className="flex gap-1 mb-6 relative z-10">
-                  {[...Array(5)].map((_, j) => (
-                     <Star key={j} size={16} className={j < Math.floor(test.rating) ? "text-amber-400 fill-amber-400" : "text-slate-600"} />
-                  ))}
+                <div className="relative mb-4">
+                  <img src={ins.img} alt={ins.name} className="w-20 h-20 rounded-2xl object-cover group-hover:scale-105 transition-transform" />
+                  <div className="absolute -bottom-2 left-1/2 -translate-x-1/2 whitespace-nowrap px-2 py-0.5 rounded-full text-[10px] font-bold text-white" style={{ background: 'linear-gradient(90deg,#818cf8,#a78bfa)' }}>{ins.badge}</div>
                 </div>
-                <p className="text-slate-300 italic mb-8 flex-1 relative z-10 leading-relaxed">"{test.content}"</p>
-                
-                <div className="flex items-center gap-4 mt-auto relative z-10 pt-6 border-t border-white/10">
-                  <img src={test.avatar} alt={test.name} className="w-12 h-12 rounded-full border-2 border-indigo-500/30" />
-                  <div>
-                    <h4 className="font-bold text-white">{test.name}</h4>
-                    <p className="text-xs text-slate-400">{test.role}</p>
-                  </div>
+                <h3 className="font-bold text-white mt-3 text-sm">{ins.name}</h3>
+                <p className="text-xs text-slate-400 mb-3 mt-0.5">{ins.role}</p>
+                <div className="flex items-center justify-center gap-3 text-xs text-slate-400">
+                  <span className="flex items-center gap-1"><Star size={11} className="text-amber-400 fill-amber-400" />{ins.rating}</span>
+                  <span>·</span>
+                  <span>{ins.students} students</span>
                 </div>
               </motion.div>
             ))}
           </div>
+        </section>
+
+        {/* 10. Testimonials — Improved */}
+        <section className="mb-32 py-24 relative overflow-hidden" style={{ background: 'linear-gradient(135deg, #0d0a2a 0%, #0f0c29 50%, #0d1635 100%)' }}>
+          <div className="absolute top-0 left-1/4 w-96 h-96 bg-indigo-600/10 blur-[120px] rounded-full pointer-events-none" />
+          <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-purple-600/10 blur-[120px] rounded-full pointer-events-none" />
+          <div className="max-w-7xl mx-auto px-6 relative z-10">
+            <div className="text-center mb-16">
+              <span className="inline-block px-4 py-1.5 rounded-full text-xs font-semibold uppercase tracking-widest bg-amber-500/10 text-amber-400 border border-amber-500/20 mb-4">Student Reviews</span>
+              <h2 className="text-3xl md:text-5xl font-bold text-white mb-4">What Our Students Say</h2>
+              <p className="text-slate-400 text-lg">Real results from real learners around the world.</p>
+            </div>
+            {/* Featured big testimonial */}
+            <motion.div
+              initial={{ opacity: 0, scale: 0.97 }}
+              whileInView={{ opacity: 1, scale: 1 }}
+              viewport={{ once: true }}
+              className="rounded-3xl p-8 md:p-12 mb-8 relative overflow-hidden"
+              style={{ background: 'rgba(129,140,248,0.08)', border: '1px solid rgba(129,140,248,0.2)' }}
+            >
+              <div className="text-[8rem] leading-none text-indigo-500/10 absolute -top-4 left-6 font-serif select-none">"</div>
+              <div className="flex flex-col md:flex-row gap-8 items-center relative z-10">
+                <img src="https://i.pravatar.cc/200?u=alex" alt="Alex" className="w-24 h-24 rounded-2xl object-cover border-2 border-indigo-500/30 shrink-0" />
+                <div>
+                  <div className="flex gap-1 mb-4">
+                    {[...Array(5)].map((_, j) => <Star key={j} size={18} className="text-amber-400 fill-amber-400" />)}
+                  </div>
+                  <p className="text-xl md:text-2xl font-medium text-white/90 leading-relaxed mb-6 italic">
+                    "BoiToi completely transformed my career. I went from zero programming knowledge to landing a ৳80,000/month software engineer role in just 6 months. The structured curriculum and live sessions made all the difference."
+                  </p>
+                  <div>
+                    <p className="font-bold text-white text-lg">Alex Rahman</p>
+                    <p className="text-slate-400 text-sm">Junior Software Engineer @ TechCorp BD</p>
+                  </div>
+                </div>
+              </div>
+            </motion.div>
+            {/* 3 smaller testimonials */}
+            <div className="grid md:grid-cols-3 gap-6">
+              {testimonials.map((test, i) => (
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: i * 0.1 }}
+                  key={i}
+                  className="p-6 rounded-2xl flex flex-col relative"
+                  style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.08)' }}
+                >
+                  <div className="flex gap-1 mb-4">
+                    {[...Array(5)].map((_, j) => (
+                      <Star key={j} size={13} className={j < Math.floor(test.rating) ? "text-amber-400 fill-amber-400" : "text-slate-600"} />
+                    ))}
+                  </div>
+                  <p className="text-slate-300 text-sm mb-6 flex-1 leading-relaxed">"{test.content}"</p>
+                  <div className="flex items-center gap-3 pt-4 border-t border-white/8">
+                    <img src={test.avatar} alt={test.name} className="w-10 h-10 rounded-full object-cover border border-indigo-500/20" />
+                    <div>
+                      <p className="font-bold text-white text-sm">{test.name}</p>
+                      <p className="text-xs text-slate-400">{test.role}</p>
+                    </div>
+                  </div>
+                </motion.div>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* 11. Newsletter CTA */}
+        <section className="max-w-7xl mx-auto px-6 mb-20">
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="relative rounded-[2.5rem] overflow-hidden p-10 md:p-16 text-center"
+            style={{ background: 'linear-gradient(135deg, rgba(99,102,241,0.15), rgba(139,92,246,0.15))', border: '1px solid rgba(99,102,241,0.25)' }}
+          >
+            <div className="absolute inset-0 pointer-events-none">
+              <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[400px] bg-indigo-600/10 blur-[80px] rounded-full" />
+            </div>
+            <div className="relative z-10">
+              <span className="inline-block px-4 py-1.5 rounded-full text-xs font-semibold uppercase tracking-widest bg-indigo-500/20 text-indigo-300 border border-indigo-500/30 mb-6">Stay Updated</span>
+              <h2 className="text-3xl md:text-5xl font-bold text-white mb-4">Level Up Your Skills</h2>
+              <p className="text-slate-400 text-lg mb-10 max-w-xl mx-auto">
+                Get weekly tips, new course alerts, and exclusive offers for software learners. Join 50,000+ subscribers.
+              </p>
+              <form className="flex flex-col sm:flex-row gap-3 max-w-md mx-auto" onSubmit={e => e.preventDefault()}>
+                <input
+                  type="email"
+                  placeholder="Enter your email address"
+                  className="flex-1 px-5 py-4 rounded-2xl text-sm text-white placeholder-slate-400 outline-none focus:ring-2 focus:ring-indigo-500 transition"
+                  style={{ background: 'rgba(255,255,255,0.08)', border: '1px solid rgba(255,255,255,0.12)' }}
+                />
+                <button
+                  type="submit"
+                  className="px-7 py-4 rounded-2xl font-bold text-white text-sm hover:opacity-90 transition-all hover:scale-105 active:scale-95 shadow-lg shadow-indigo-600/30 whitespace-nowrap"
+                  style={{ background: 'linear-gradient(135deg, #6366f1, #8b5cf6)' }}
+                >
+                  Subscribe Free
+                </button>
+              </form>
+              <p className="text-xs text-slate-500 mt-4">No spam. Unsubscribe at any time.</p>
+            </div>
+          </motion.div>
         </section>
       </main>
 

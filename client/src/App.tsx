@@ -102,6 +102,10 @@ function App() {
                 <Route path="/teacher/courses/create" element={<CreateCourse />} />
                 <Route path="/teacher/live" element={<TeacherLiveSessions />} />
                 <Route path="/teacher/assignments" element={<TeacherAssignments />} />
+                {/* Placeholder routes for sidebar links */}
+                <Route path="/teacher/students" element={<div className="p-8 text-center text-white/60">My Students — Coming Soon</div>} />
+                <Route path="/teacher/earnings" element={<div className="p-8 text-center text-white/60">Earnings — Coming Soon</div>} />
+                <Route path="/teacher/settings" element={<div className="p-8 text-center text-white/60">Settings — Coming Soon</div>} />
               </Route>
               {/* Full-screen views (no sidebar) */}
               <Route path="/teacher/courses/:courseId/quiz/create" element={<CreateQuiz />} />

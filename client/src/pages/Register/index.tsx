@@ -80,15 +80,14 @@ const Register: React.FC = () => {
         className="w-full max-w-md relative"
       >
         {/* Logo */}
-        <div className="flex items-center justify-center gap-2.5 mb-6">
-          <div className="w-10 h-10 rounded-xl flex items-center justify-center"
-            style={{ background: 'linear-gradient(135deg, #f97316, #8b5cf6)' }}>
-            <Sparkles size={20} className="text-white" />
+        <Link to="/" className="flex items-center justify-center gap-2.5 mb-6 group">
+          <div className="w-10 h-10 rounded-xl bg-white flex items-center justify-center shadow-lg shadow-white/10 group-hover:shadow-white/20 transition-all overflow-hidden shrink-0">
+            <img src="/logo.png" alt="BoiToi" className="w-8 h-8 object-contain" />
           </div>
-          <span className="text-xl font-bold text-white">
-            LMS <span style={{ background: 'linear-gradient(90deg,#f97316,#8b5cf6)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>Platform</span>
+          <span className="text-2xl font-bold tracking-tight text-white">
+            Boi<span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 to-purple-400">Toi</span>
           </span>
-        </div>
+        </Link>
 
         <div className="rounded-2xl p-7"
           style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.1)', backdropFilter: 'blur(20px)' }}>

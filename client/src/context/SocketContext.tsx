@@ -119,6 +119,20 @@ export const SocketProvider: React.FC<{ children: React.ReactNode }> = ({ childr
 
 export const useSocket = () => {
   const ctx = useContext(SocketContext);
-  if (!ctx) throw new Error('useSocket must be used within SocketProvider');
+  if (!ctx) {
+    // Return a safe default instead of crashing
+    return {
+      socket: null,
+      isConnected: false,
+      notifications: [],
+      unreadCount: 0,
+      markRead: () => {},
+      markAllRead: () => {},
+      joinCourse: () => {},
+      joinLive: () => {},
+      leaveLive: () => {},
+      sendLiveMessage: () => {},
+    };
+  }
   return ctx;
 };

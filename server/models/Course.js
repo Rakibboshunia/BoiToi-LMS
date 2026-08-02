@@ -105,14 +105,13 @@ const courseSchema = new mongoose.Schema(
 );
 
 // Auto-generate slug
-courseSchema.pre("save", function (next) {
+courseSchema.pre("save", function () {
   if (this.isModified("title")) {
     this.slug = this.title
       .toLowerCase()
       .replace(/[^a-z0-9]+/g, "-")
       .replace(/(^-|-$)/g, "") + "-" + Date.now();
   }
-  next();
 });
 
 module.exports = mongoose.model("Course", courseSchema);

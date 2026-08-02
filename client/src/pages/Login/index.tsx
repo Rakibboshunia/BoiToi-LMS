@@ -56,13 +56,14 @@ const Login: React.FC = () => {
           className="relative text-center"
         >
           {/* Logo */}
-          <div className="flex items-center justify-center gap-3 mb-10">
-            <div className="w-12 h-12 rounded-2xl flex items-center justify-center"
-              style={{ background: 'linear-gradient(135deg, #f97316, #8b5cf6)' }}>
-              <Sparkles size={24} className="text-white" />
+          <Link to="/" className="flex items-center justify-center gap-3 mb-10 group">
+            <div className="w-12 h-12 rounded-2xl bg-white flex items-center justify-center shadow-lg shadow-white/10 group-hover:shadow-white/20 transition-all overflow-hidden shrink-0">
+              <img src="/logo.png" alt="BoiToi" className="w-9 h-9 object-contain" />
             </div>
-            <span className="text-2xl font-bold text-white">LMS <span style={{ background: 'linear-gradient(90deg,#f97316,#8b5cf6)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>Platform</span></span>
-          </div>
+            <span className="text-3xl font-bold tracking-tight text-white">
+              Boi<span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 to-purple-400">Toi</span>
+            </span>
+          </Link>
 
           <h2 className="text-3xl font-bold text-white mb-4 leading-tight">
             Learn. Grow.<br />
@@ -102,12 +103,14 @@ const Login: React.FC = () => {
           className="w-full max-w-md"
         >
           {/* Mobile logo */}
-          <div className="flex items-center justify-center gap-2 mb-8 lg:hidden">
-            <div className="w-9 h-9 rounded-xl flex items-center justify-center" style={{ background: 'linear-gradient(135deg,#f97316,#8b5cf6)' }}>
-              <Sparkles size={18} className="text-white" />
+          <Link to="/" className="flex items-center justify-center gap-2.5 mb-8 lg:hidden group">
+            <div className="w-10 h-10 rounded-xl bg-white flex items-center justify-center shadow-lg shadow-white/10 group-hover:shadow-white/20 transition-all overflow-hidden shrink-0">
+              <img src="/logo.png" alt="BoiToi" className="w-8 h-8 object-contain" />
             </div>
-            <span className="text-xl font-bold text-white">LMS Platform</span>
-          </div>
+            <span className="text-2xl font-bold tracking-tight text-white">
+              Boi<span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 to-purple-400">Toi</span>
+            </span>
+          </Link>
 
           <div className="rounded-2xl p-8" style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.1)', backdropFilter: 'blur(20px)' }}>
             <div className="mb-7">
