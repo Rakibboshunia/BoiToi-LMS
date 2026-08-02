@@ -12,7 +12,7 @@ const mockEnrolledCourses = [
     instructor: 'Jane Doe',
     progress: 45,
     thumbnail: '',
-    category: 'Development',
+    category: 'Web Development',
   },
   {
     id: 'course-2',
@@ -20,7 +20,7 @@ const mockEnrolledCourses = [
     instructor: 'Alex Smith',
     progress: 12,
     thumbnail: '',
-    category: 'Design',
+    category: 'System Design',
   },
 ];
 

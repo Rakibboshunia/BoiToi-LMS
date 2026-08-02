@@ -4,7 +4,7 @@ import { useAuth } from '../../context/AuthContext';
 import {
   Menu, LogOut, User as UserIcon, BookOpen,
   LayoutDashboard, PlayCircle, Settings, Award,
-  CreditCard, Users, FileText, Sparkles, ChevronRight
+  CreditCard, Users, FileText, ChevronRight
 } from 'lucide-react';
 import { cn } from '../../utils/cn';
 import NotificationBell from '../NotificationBell';
@@ -73,12 +73,13 @@ export const DashboardLayout: React.FC = () => {
         }}
       >
         {/* Logo */}
-        <div className="h-16 flex items-center px-6 gap-2" style={{ borderBottom: '1px solid rgba(255,255,255,0.08)' }}>
-          <div className="w-8 h-8 rounded-lg flex items-center justify-center"
-            style={{ background: 'linear-gradient(135deg, #f97316, #8b5cf6)' }}>
-            <Sparkles size={16} className="text-white" />
+        <div className="h-16 flex items-center px-5 gap-2.5" style={{ borderBottom: '1px solid rgba(255,255,255,0.08)' }}>
+          <div className="w-9 h-9 rounded-xl bg-white flex items-center justify-center shadow-lg overflow-hidden shrink-0">
+            <img src="/logo.png" alt="BoiToi" className="w-8 h-8 object-contain" />
           </div>
-          <span className="text-lg font-bold text-white tracking-tight">LMS <span style={{ background: 'linear-gradient(90deg,#f97316,#8b5cf6)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>Platform</span></span>
+          <span className="text-xl font-bold text-white tracking-tight">
+            Boi<span style={{ background: 'linear-gradient(90deg, #818cf8, #a78bfa)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>Toi</span>
+          </span>
         </div>
 
         {/* User Profile Card */}
