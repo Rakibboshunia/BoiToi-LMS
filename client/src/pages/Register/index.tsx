@@ -5,7 +5,7 @@ import * as z from 'zod';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import { motion } from 'framer-motion';
-import { Mail, Lock, Eye, EyeOff, User, Sparkles, ArrowRight, GraduationCap, ChalkboardTeacher } from 'lucide-react';
+import { Mail, Lock, Eye, EyeOff, User, Sparkles, ArrowRight, GraduationCap } from 'lucide-react';
 
 // Use a simple SVG icon since lucide doesn't have ChalkboardTeacher
 const TeacherIcon = () => (
