@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { 
-  Sparkles, BookOpen, PlayCircle, Award, ArrowRight, 
-  Users, Zap, Star, Search, Menu, X, CheckCircle, 
-  Globe, Monitor, Code, Cpu, Database, Smartphone, 
+import {
+  Sparkles, BookOpen, PlayCircle, Award, ArrowRight,
+  Users, Zap, Star, Search, Menu, X, CheckCircle,
+  Globe, Monitor, Code, Cpu, Database, Smartphone,
   Cloud, Shield, Play
 } from 'lucide-react';
 import { useQuery } from '@tanstack/react-query';
@@ -23,23 +23,23 @@ const categories = [
 ];
 
 const benefits = [
-  { 
-    title: 'Learn from industry experts', 
+  {
+    title: 'Learn from industry experts',
     description: 'Select from top instructors around the world who have real-world experience.',
     icon: <Users size={28} className="text-blue-400" />
   },
-  { 
-    title: 'Find video courses on almost any topic', 
+  {
+    title: 'Find video courses on almost any topic',
     description: 'Build your library for your career and personal growth.',
     icon: <PlayCircle size={28} className="text-purple-400" />
   },
-  { 
-    title: 'Learn at your own pace', 
+  {
+    title: 'Learn at your own pace',
     description: 'Enjoy lifetime access to courses on our platform and mobile app.',
     icon: <Zap size={28} className="text-orange-400" />
   },
-  { 
-    title: 'Earn recognized certificates', 
+  {
+    title: 'Earn recognized certificates',
     description: 'Prove your skills to employers with verifiable completion certificates.',
     icon: <Award size={28} className="text-emerald-400" />
   }
@@ -101,7 +101,7 @@ const Home: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-[#0a0a0e] text-slate-200 font-sans selection:bg-indigo-500/30 overflow-x-hidden">
-      
+
       {/* 1. Navigation Bar */}
       <header className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${isScrolled ? 'bg-[#0a0a0e]/80 backdrop-blur-md border-b border-white/10 py-3' : 'bg-transparent py-5'}`}>
         <div className="max-w-7xl mx-auto px-6 flex items-center justify-between">
@@ -118,11 +118,11 @@ const Home: React.FC = () => {
             {/* Desktop Search */}
             <form onSubmit={handleSearch} className="hidden lg:flex items-center bg-white/5 border border-white/10 rounded-full px-4 py-2 w-80 focus-within:bg-white/10 focus-within:border-indigo-500/50 transition-all">
               <Search size={18} className="text-slate-400 mr-2" />
-              <input 
-                type="text" 
+              <input
+                type="text"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                placeholder="Search for anything..." 
+                placeholder="Search for anything..."
                 className="bg-transparent border-none outline-none text-sm w-full text-white placeholder:text-slate-500"
               />
             </form>
@@ -133,9 +133,9 @@ const Home: React.FC = () => {
             <Link to="/courses" className="text-sm font-medium text-slate-300 hover:text-white transition-colors">Courses</Link>
             <Link to="/courses" className="text-sm font-medium text-slate-300 hover:text-white transition-colors">Categories</Link>
             <Link to="/register?role=teacher" className="text-sm font-medium text-slate-300 hover:text-white transition-colors">Teach</Link>
-            
+
             <div className="w-px h-6 bg-white/10 mx-2"></div>
-            
+
             <Link to="/login" className="text-sm font-medium text-slate-300 hover:text-white transition-colors">
               Log in
             </Link>
@@ -145,7 +145,7 @@ const Home: React.FC = () => {
           </nav>
 
           {/* Mobile Menu Toggle */}
-          <button 
+          <button
             className="md:hidden text-slate-300 hover:text-white"
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
           >
@@ -156,7 +156,7 @@ const Home: React.FC = () => {
         {/* Mobile Menu */}
         <AnimatePresence>
           {isMobileMenuOpen && (
-            <motion.div 
+            <motion.div
               initial={{ opacity: 0, y: -20 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -20 }}
@@ -164,12 +164,12 @@ const Home: React.FC = () => {
             >
               <form onSubmit={handleSearch} className="flex items-center bg-white/5 border border-white/10 rounded-lg px-4 py-3 mb-2">
                 <Search size={18} className="text-slate-400 mr-2" />
-                <input 
-                  type="text" 
+                <input
+                  type="text"
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  placeholder="Search..." 
-                  className="bg-transparent border-none outline-none text-sm w-full text-white" 
+                  placeholder="Search..."
+                  className="bg-transparent border-none outline-none text-sm w-full text-white"
                 />
               </form>
               <Link to="/courses" className="text-base font-medium text-slate-300 py-2 border-b border-white/5">Courses</Link>
@@ -193,7 +193,7 @@ const Home: React.FC = () => {
           <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-blue-600/10 blur-[100px] rounded-full pointer-events-none -z-10"></div>
 
           <div className="grid lg:grid-cols-2 gap-12 lg:gap-8 items-center min-h-[70vh]">
-            <motion.div 
+            <motion.div
               initial={{ opacity: 0, x: -50 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.8, ease: "easeOut" }}
@@ -203,18 +203,18 @@ const Home: React.FC = () => {
                 <Sparkles size={14} />
                 The New Standard of Learning
               </div>
-              
+
               <h1 className="text-5xl md:text-7xl font-extrabold text-white leading-[1.1] mb-6 tracking-tight">
                 Unlock Your <br />
                 <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 via-purple-400 to-pink-400">
                   Potential
                 </span> Today.
               </h1>
-              
+
               <p className="text-lg md:text-xl text-slate-400 mb-10 max-w-lg leading-relaxed">
                 Join over 12 million students learning from world-class instructors. Master new skills, advance your career, and explore your passions.
               </p>
-              
+
               <div className="flex flex-col sm:flex-row gap-4 w-full sm:w-auto">
                 <Link to="/register" className="flex items-center justify-center gap-2 px-8 py-4 rounded-full font-bold text-white bg-indigo-600 hover:bg-indigo-700 shadow-lg shadow-indigo-600/25 transition-all hover:scale-105 active:scale-95">
                   Get Started Free
@@ -248,22 +248,22 @@ const Home: React.FC = () => {
               </div>
             </motion.div>
 
-            <motion.div 
+            <motion.div
               initial={{ opacity: 0, x: 50 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.8, delay: 0.2, ease: "easeOut" }}
               className="relative hidden lg:block"
             >
               <div className="relative w-full aspect-square rounded-[3rem] overflow-hidden border border-white/10 shadow-2xl shadow-indigo-900/50 bg-[#1a1a24] p-4">
-                <img 
-                  src="https://images.unsplash.com/photo-1522202176988-66273c2fd55f?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80" 
-                  alt="Students learning together" 
+                <img
+                  src="https://images.unsplash.com/photo-1522202176988-66273c2fd55f?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80"
+                  alt="Students learning together"
                   className="w-full h-full object-cover rounded-[2.5rem]"
                 />
-                
+
                 {/* Floating UI Elements */}
-                <motion.div 
-                  animate={{ y: [0, -15, 0] }} 
+                <motion.div
+                  animate={{ y: [0, -15, 0] }}
                   transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
                   className="absolute top-12 -left-6 bg-[#1a1a24] border border-white/10 p-4 rounded-2xl shadow-xl flex items-center gap-4"
                 >
@@ -276,13 +276,13 @@ const Home: React.FC = () => {
                   </div>
                 </motion.div>
 
-                <motion.div 
-                  animate={{ y: [0, 15, 0] }} 
+                <motion.div
+                  animate={{ y: [0, 15, 0] }}
                   transition={{ duration: 5, repeat: Infinity, ease: "easeInOut", delay: 1 }}
                   className="absolute bottom-16 -right-6 bg-[#1a1a24] border border-white/10 p-4 rounded-2xl shadow-xl flex items-center gap-4"
                 >
                   <div className="flex -space-x-3">
-                    {[1,2,3,4].map(i => (
+                    {[1, 2, 3, 4].map(i => (
                       <img key={i} src={`https://i.pravatar.cc/100?img=${i}`} alt="user" className="w-10 h-10 rounded-full border-2 border-[#1a1a24]" />
                     ))}
                   </div>
@@ -380,7 +380,7 @@ const Home: React.FC = () => {
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
             {categories.map((cat, i) => (
-              <motion.div 
+              <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, margin: "-50px" }}
@@ -402,7 +402,7 @@ const Home: React.FC = () => {
         {/* 5. Why Choose Us (Benefits) */}
         <section className="py-24 bg-[#12121a] mb-32 border-y border-white/5 relative overflow-hidden">
           <div className="absolute top-0 right-1/4 w-96 h-96 bg-indigo-600/10 blur-[100px] rounded-full pointer-events-none"></div>
-          
+
           <div className="max-w-7xl mx-auto px-6 flex flex-col items-center">
             <div className="text-center mb-16 max-w-3xl">
               <h2 className="text-3xl md:text-4xl font-bold text-white mb-6">Why Learn with BoiToi?</h2>
@@ -411,7 +411,7 @@ const Home: React.FC = () => {
 
             <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
               {benefits.map((benefit, i) => (
-                <motion.div 
+                <motion.div
                   initial={{ opacity: 0, y: 20 }}
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
@@ -448,7 +448,7 @@ const Home: React.FC = () => {
           ) : featuredCourses.length > 0 ? (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
               {featuredCourses.map((course: any, i: number) => (
-                <motion.div 
+                <motion.div
                   initial={{ opacity: 0, y: 20 }}
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
@@ -464,7 +464,7 @@ const Home: React.FC = () => {
                           <BookOpen size={40} className="text-white/10" />
                         </div>
                       )}
-                      
+
                       {/* Overlay badges */}
                       <div className="absolute top-3 left-3 bg-black/60 backdrop-blur-md px-3 py-1 rounded-full text-xs font-semibold text-white border border-white/10">
                         {course.category}
@@ -483,12 +483,12 @@ const Home: React.FC = () => {
                         </span>
                         <span className="text-slate-500 text-xs">({course.rating?.count || 0} reviews)</span>
                       </div>
-                      
+
                       <h3 className="font-bold text-white text-lg leading-tight mb-2 line-clamp-2 group-hover:text-indigo-400 transition-colors">{course.title}</h3>
                       <p className="text-sm text-slate-400 line-clamp-2 mb-4 flex-1">
                         {course.shortDescription || course.description}
                       </p>
-                      
+
                       <div className="pt-4 border-t border-white/5 flex items-center justify-between mt-auto">
                         <div className="flex items-center gap-2">
                           <div className="w-6 h-6 rounded-full bg-gradient-to-r from-purple-500 to-indigo-500 flex items-center justify-center text-[10px] font-bold text-white">
@@ -506,9 +506,9 @@ const Home: React.FC = () => {
               ))}
             </div>
           ) : (
-             <div className="text-center py-20 bg-white/5 border border-white/10 rounded-2xl border-dashed">
-                <p className="text-slate-400">No courses available at the moment.</p>
-             </div>
+            <div className="text-center py-20 bg-white/5 border border-white/10 rounded-2xl border-dashed">
+              <p className="text-slate-400">No courses available at the moment.</p>
+            </div>
           )}
         </section>
 
@@ -517,15 +517,31 @@ const Home: React.FC = () => {
           <div className="bg-gradient-to-br from-indigo-900 via-purple-900 to-[#1a1040] rounded-[3rem] p-10 md:p-16 relative overflow-hidden border border-white/10 shadow-2xl">
             {/* Abstract Background Shapes */}
             <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-white/5 rounded-full blur-[80px] pointer-events-none translate-x-1/3 -translate-y-1/3"></div>
-            
+            <div className="absolute bottom-0 left-0 w-[400px] h-[400px] bg-indigo-600/10 rounded-full blur-[80px] pointer-events-none -translate-x-1/3 translate-y-1/3"></div>
+
             <div className="grid lg:grid-cols-2 gap-12 items-center relative z-10">
-              <div>
-                <h2 className="text-4xl md:text-5xl font-bold text-white mb-6 leading-tight">Come teach with us</h2>
+              <motion.div
+                initial={{ opacity: 0, x: -30 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                viewport={{ once: true }}
+              >
+                <span className="inline-block px-4 py-1.5 rounded-full text-xs font-semibold uppercase tracking-widest bg-white/10 text-white/70 border border-white/20 mb-6">
+                  👨‍💻 For Software Developers
+                </span>
+                <h2 className="text-4xl md:text-5xl font-bold text-white mb-6 leading-tight">
+                  Share Your Dev Skills.<br />
+                  <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-300 to-purple-300">Earn While You Teach.</span>
+                </h2>
                 <p className="text-lg text-slate-300 mb-8 leading-relaxed max-w-lg">
-                  Become an instructor and change lives — including your own. We provide the tools and skills to teach what you love.
+                  Are you a software developer? Turn your expertise into income. Teach Web Dev, AI, DevOps, or any tech skill — and reach thousands of aspiring developers across Bangladesh and beyond.
                 </p>
                 <ul className="space-y-4 mb-10">
-                  {['Earn money sharing your expertise', 'Inspire millions of students globally', 'Join a community of 50k+ instructors'].map((item, i) => (
+                  {[
+                    'Monetize your coding knowledge & experience',
+                    'Reach 12M+ tech-hungry learners worldwide',
+                    'Full dashboard to manage courses & students',
+                    'Live session tools + quiz & assignment builder',
+                  ].map((item, i) => (
                     <li key={i} className="flex items-center gap-3 text-slate-200">
                       <div className="w-6 h-6 rounded-full bg-indigo-500/20 text-indigo-400 flex items-center justify-center shrink-0">
                         <CheckCircle size={14} />
@@ -534,26 +550,61 @@ const Home: React.FC = () => {
                     </li>
                   ))}
                 </ul>
-                <Link to="/register?role=teacher" className="inline-flex items-center justify-center px-8 py-4 rounded-full font-bold text-indigo-900 bg-white hover:bg-slate-100 transition-all shadow-lg hover:shadow-white/25">
-                  Start teaching today
-                </Link>
-              </div>
-              
-              <div className="hidden lg:block relative">
-                <div className="relative w-full aspect-[4/3] rounded-3xl overflow-hidden border-4 border-white/10 shadow-2xl rotate-2 hover:rotate-0 transition-transform duration-500">
-                  <img src="https://images.unsplash.com/photo-1573164713988-8665fc963095?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Instructor teaching" className="w-full h-full object-cover" />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent"></div>
-                  <div className="absolute bottom-6 left-6 right-6">
-                     <div className="bg-white/10 backdrop-blur-md border border-white/20 p-4 rounded-xl flex items-center justify-between">
+                <div className="flex flex-wrap gap-4">
+                  <Link to="/register?role=teacher" className="inline-flex items-center gap-2 justify-center px-8 py-4 rounded-full font-bold text-indigo-900 bg-white hover:bg-slate-100 transition-all shadow-lg hover:shadow-white/25 hover:scale-105 active:scale-95">
+                    Start Teaching Today
+                    <ArrowRight size={18} />
+                  </Link>
+                  <Link to="/courses" className="inline-flex items-center gap-2 justify-center px-8 py-4 rounded-full font-bold text-white border border-white/20 hover:bg-white/10 transition-all">
+                    Browse Courses
+                  </Link>
+                </div>
+              </motion.div>
+
+              <motion.div
+                initial={{ opacity: 0, x: 30 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: 0.2 }}
+                className="hidden lg:block relative"
+              >
+                <div className="relative w-full aspect-[3/4] rounded-3xl overflow-hidden border-2 border-white/15 shadow-2xl">
+                  <img src="/instructor.png" alt="Software Developer Instructor" className="w-full h-full object-cover" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-[#1a1040]/90 via-transparent to-transparent"></div>
+                  {/* Floating name card */}
+                  <div className="absolute bottom-6 left-4 right-4">
+                    <div className="bg-white/10 backdrop-blur-md border border-white/20 p-4 rounded-2xl">
+                      <div className="flex items-center justify-between mb-3">
                         <div>
-                          <p className="text-white font-bold">John Doe</p>
-                          <p className="text-slate-300 text-xs">Web Developer Instructor</p>
+                          <p className="text-white font-bold text-base">Al Rakeb Boshunia</p>
+                          <p className="text-indigo-300 text-xs font-medium">Full-Stack Developer & Instructor</p>
                         </div>
-                        <div className="bg-indigo-600 px-3 py-1 rounded-lg text-xs font-bold text-white">Top Rated</div>
-                     </div>
+                        <div className="bg-gradient-to-r from-indigo-500 to-purple-500 px-3 py-1 rounded-lg text-xs font-bold text-white">⭐ Top Rated</div>
+                      </div>
+                      <div className="flex gap-4 text-center">
+                        {[{ v: '2.4k+', l: 'Students' }, { v: '8', l: 'Courses' }, { v: '4.9', l: 'Rating' }].map((s, i) => (
+                          <div key={i} className="flex-1">
+                            <p className="text-white font-bold text-sm">{s.v}</p>
+                            <p className="text-slate-400 text-[10px]">{s.l}</p>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
                   </div>
                 </div>
-              </div>
+                {/* Floating badge */}
+                <motion.div
+                  animate={{ y: [0, -10, 0] }}
+                  transition={{ duration: 3, repeat: Infinity, ease: 'easeInOut' }}
+                  className="absolute -top-4 -left-4 bg-[#1a1a30] border border-white/10 p-3 rounded-2xl shadow-xl flex items-center gap-3"
+                >
+                  <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-emerald-400 to-cyan-500 flex items-center justify-center text-xl">💻</div>
+                  <div>
+                    <p className="text-xs text-slate-400">Avg Monthly Earning</p>
+                    <p className="text-sm font-bold text-white">৳45,000+</p>
+                  </div>
+                </motion.div>
+              </motion.div>
             </div>
           </div>
         </section>
@@ -565,13 +616,34 @@ const Home: React.FC = () => {
             <h2 className="text-3xl md:text-5xl font-bold text-white mb-4">How BoiToi Works</h2>
             <p className="text-slate-400 text-lg max-w-xl mx-auto">Get started in minutes. No prior experience needed.</p>
           </div>
-          <div className="grid md:grid-cols-3 gap-8 relative">
+          <div className="grid md:grid-cols-3 gap-6 relative">
             {/* Connector Line */}
-            <div className="hidden md:block absolute top-14 left-[calc(16.67%+1rem)] right-[calc(16.67%+1rem)] h-px" style={{ background: 'linear-gradient(90deg, transparent, rgba(129,140,248,0.4), rgba(167,139,250,0.4), transparent)' }} />
+            <div className="hidden md:block absolute top-[3.5rem] left-[calc(16.67%+2.5rem)] right-[calc(16.67%+2.5rem)] h-0.5" style={{ background: 'linear-gradient(90deg, rgba(99,102,241,0.5), rgba(167,139,250,0.5))' }} />
             {[
-              { step: '01', title: 'Create Your Account', desc: 'Sign up for free in seconds. No credit card required. Choose your role — student or instructor.', icon: '✍️', color: 'from-indigo-500 to-blue-500' },
-              { step: '02', title: 'Find Your Course', desc: 'Browse 10,000+ expert-led software courses. Filter by skill level, topic, or instructor rating.', icon: '🔍', color: 'from-purple-500 to-indigo-500' },
-              { step: '03', title: 'Start Learning', desc: 'Learn at your own pace with HD videos, live sessions, quizzes, and get a certificate upon completion.', icon: '🚀', color: 'from-pink-500 to-purple-500' },
+              {
+                step: '01',
+                title: 'Create Account',
+                desc: 'Sign up free in seconds. No credit card needed. Pick your role as student or instructor.',
+                icon: <Users size={28} className="text-white" />,
+                color: 'from-indigo-500 to-blue-500',
+                glow: 'rgba(99,102,241,0.3)',
+              },
+              {
+                step: '02',
+                title: 'Find Your Course',
+                desc: 'Browse 10,000+ expert-led software courses. Filter by topic, skill level, or rating.',
+                icon: <Search size={28} className="text-white" />,
+                color: 'from-purple-500 to-indigo-500',
+                glow: 'rgba(139,92,246,0.3)',
+              },
+              {
+                step: '03',
+                title: 'Learn & Earn Certificate',
+                desc: 'Watch HD videos, join live classes, take quizzes, and earn a verified certificate.',
+                icon: <Award size={28} className="text-white" />,
+                color: 'from-pink-500 to-purple-500',
+                glow: 'rgba(236,72,153,0.3)',
+              },
             ].map((s, i) => (
               <motion.div
                 key={i}
@@ -579,15 +651,20 @@ const Home: React.FC = () => {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ delay: i * 0.15 }}
-                className="relative flex flex-col items-center text-center p-8 rounded-3xl group"
+                className="relative flex flex-col items-center text-center p-8 rounded-3xl group hover:-translate-y-1 transition-all duration-300"
                 style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.08)' }}
               >
-                <div className={`w-20 h-20 rounded-2xl bg-gradient-to-br ${s.color} flex items-center justify-center text-4xl mb-6 shadow-lg group-hover:scale-110 transition-transform`}>
+                {/* Icon circle */}
+                <div className={`relative w-20 h-20 rounded-2xl bg-gradient-to-br ${s.color} flex items-center justify-center mb-6 shadow-xl group-hover:scale-110 transition-transform duration-300`}
+                  style={{ boxShadow: `0 8px 30px ${s.glow}` }}>
                   {s.icon}
+                  {/* Step badge */}
+                  <div className="absolute -top-2.5 -right-2.5 w-7 h-7 rounded-full flex items-center justify-center text-[11px] font-black text-white border-2 border-[#0a0a0e]" style={{ background: 'linear-gradient(135deg,#818cf8,#a78bfa)' }}>{s.step}</div>
                 </div>
-                <div className="absolute -top-3 -right-3 w-8 h-8 rounded-full flex items-center justify-center text-xs font-black text-white" style={{ background: 'linear-gradient(135deg,#818cf8,#a78bfa)' }}>{s.step}</div>
                 <h3 className="text-xl font-bold text-white mb-3">{s.title}</h3>
                 <p className="text-slate-400 leading-relaxed text-sm">{s.desc}</p>
+                {/* Bottom accent line */}
+                <div className={`absolute bottom-0 left-1/2 -translate-x-1/2 w-16 h-0.5 rounded-full bg-gradient-to-r ${s.color} opacity-0 group-hover:opacity-100 transition-opacity`} />
               </motion.div>
             ))}
           </div>
@@ -605,12 +682,12 @@ const Home: React.FC = () => {
               View all instructors <ArrowRight size={16} className="group-hover:translate-x-1 transition-transform" />
             </Link>
           </div>
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
             {[
-              { name: 'Aryan Khan', role: 'React & Next.js Expert', courses: 12, students: '32k', rating: 4.9, img: 'https://i.pravatar.cc/200?img=11', badge: '🏆 Top Instructor' },
-              { name: 'Priya Sharma', role: 'Data Science & AI Lead', courses: 8, students: '28k', rating: 4.8, img: 'https://i.pravatar.cc/200?img=5', badge: '⭐ Most Popular' },
-              { name: 'James Lee', role: 'DevOps & Cloud Architect', courses: 15, students: '41k', rating: 4.9, img: 'https://i.pravatar.cc/200?img=12', badge: '🔥 Trending' },
-              { name: 'Sara Ahmed', role: 'Cybersecurity Expert', courses: 6, students: '19k', rating: 4.7, img: 'https://i.pravatar.cc/200?img=9', badge: '✅ Verified' },
+              { name: 'Aryan Khan', role: 'React & Next.js', specialty: 'Web Development', courses: 12, students: '32k', rating: 4.9, img: 'https://i.pravatar.cc/200?img=11', badge: 'Top Instructor', badgeColor: 'from-amber-500 to-orange-500', accentColor: '#6366f1' },
+              { name: 'Priya Sharma', role: 'Data Science & AI', specialty: 'Machine Learning', courses: 8, students: '28k', rating: 4.8, img: 'https://i.pravatar.cc/200?img=5', badge: 'Most Popular', badgeColor: 'from-pink-500 to-rose-500', accentColor: '#a855f7' },
+              { name: 'James Lee', role: 'DevOps & Cloud', specialty: 'AWS & Docker', courses: 15, students: '41k', rating: 4.9, img: 'https://i.pravatar.cc/200?img=12', badge: 'Trending', badgeColor: 'from-red-500 to-pink-500', accentColor: '#06b6d4' },
+              { name: 'Sara Ahmed', role: 'Cybersecurity', specialty: 'Ethical Hacking', courses: 6, students: '19k', rating: 4.7, img: 'https://i.pravatar.cc/200?img=9', badge: 'Verified Pro', badgeColor: 'from-emerald-500 to-teal-500', accentColor: '#10b981' },
             ].map((ins, i) => (
               <motion.div
                 key={i}
@@ -618,19 +695,42 @@ const Home: React.FC = () => {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ delay: i * 0.1 }}
-                className="group flex flex-col items-center text-center p-6 rounded-3xl cursor-pointer hover:-translate-y-1 transition-all duration-300"
+                className="group flex flex-col rounded-3xl cursor-pointer overflow-hidden hover:-translate-y-2 transition-all duration-300"
                 style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.08)' }}
               >
-                <div className="relative mb-4">
-                  <img src={ins.img} alt={ins.name} className="w-20 h-20 rounded-2xl object-cover group-hover:scale-105 transition-transform" />
-                  <div className="absolute -bottom-2 left-1/2 -translate-x-1/2 whitespace-nowrap px-2 py-0.5 rounded-full text-[10px] font-bold text-white" style={{ background: 'linear-gradient(90deg,#818cf8,#a78bfa)' }}>{ins.badge}</div>
-                </div>
-                <h3 className="font-bold text-white mt-3 text-sm">{ins.name}</h3>
-                <p className="text-xs text-slate-400 mb-3 mt-0.5">{ins.role}</p>
-                <div className="flex items-center justify-center gap-3 text-xs text-slate-400">
-                  <span className="flex items-center gap-1"><Star size={11} className="text-amber-400 fill-amber-400" />{ins.rating}</span>
-                  <span>·</span>
-                  <span>{ins.students} students</span>
+                {/* Top accent */}
+                <div className="h-1 w-full" style={{ background: `linear-gradient(90deg, ${ins.accentColor}, transparent)` }} />
+                <div className="p-6 flex flex-col items-center text-center">
+                  {/* Avatar with ring */}
+                  <div className="relative mb-4">
+                    <div className="w-24 h-24 rounded-2xl overflow-hidden ring-2 ring-white/10 group-hover:ring-indigo-500/40 transition-all">
+                      <img src={ins.img} alt={ins.name} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" />
+                    </div>
+                    <div className={`absolute -bottom-2 left-1/2 -translate-x-1/2 whitespace-nowrap px-2.5 py-0.5 rounded-full text-[10px] font-bold text-white bg-gradient-to-r ${ins.badgeColor}`}>
+                      {ins.badge}
+                    </div>
+                  </div>
+                  <h3 className="font-bold text-white text-base mt-2">{ins.name}</h3>
+                  <p className="text-xs font-semibold mt-0.5" style={{ color: ins.accentColor }}>{ins.role}</p>
+                  <p className="text-xs text-slate-500 mb-4">{ins.specialty}</p>
+                  {/* Rating row */}
+                  <div className="flex items-center gap-1 mb-5">
+                    {[...Array(5)].map((_, j) => (
+                      <Star key={j} size={12} className={j < Math.floor(ins.rating) ? 'text-amber-400 fill-amber-400' : 'text-slate-600'} />
+                    ))}
+                    <span className="text-xs text-white ml-1 font-semibold">{ins.rating}</span>
+                  </div>
+                  {/* Stats */}
+                  <div className="w-full grid grid-cols-2 gap-2">
+                    <div className="rounded-xl py-2" style={{ background: 'rgba(255,255,255,0.05)' }}>
+                      <p className="text-sm font-bold text-white">{ins.students}</p>
+                      <p className="text-[10px] text-slate-400">Students</p>
+                    </div>
+                    <div className="rounded-xl py-2" style={{ background: 'rgba(255,255,255,0.05)' }}>
+                      <p className="text-sm font-bold text-white">{ins.courses}</p>
+                      <p className="text-[10px] text-slate-400">Courses</p>
+                    </div>
+                  </div>
                 </div>
               </motion.div>
             ))}
@@ -764,7 +864,7 @@ const Home: React.FC = () => {
                   className="w-10 h-10 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-slate-400 hover:bg-indigo-600 hover:text-white hover:border-indigo-500 transition-all group"
                   title="GitHub">
                   <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
-                    <path d="M12 0C5.37 0 0 5.373 0 12c0 5.303 3.438 9.8 8.205 11.387.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61-.546-1.387-1.333-1.756-1.333-1.756-1.09-.745.083-.73.083-.73 1.205.085 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 21.795 24 17.298 24 12c0-6.627-5.373-12-12-12z"/>
+                    <path d="M12 0C5.37 0 0 5.373 0 12c0 5.303 3.438 9.8 8.205 11.387.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61-.546-1.387-1.333-1.756-1.333-1.756-1.09-.745.083-.73.083-.73 1.205.085 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 21.795 24 17.298 24 12c0-6.627-5.373-12-12-12z" />
                   </svg>
                 </a>
                 {/* Portfolio */}
@@ -772,9 +872,9 @@ const Home: React.FC = () => {
                   className="w-10 h-10 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-slate-400 hover:bg-purple-600 hover:text-white hover:border-purple-500 transition-all group"
                   title="Portfolio">
                   <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                    <circle cx="12" cy="12" r="10"/>
-                    <line x1="2" y1="12" x2="22" y2="12"/>
-                    <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
+                    <circle cx="12" cy="12" r="10" />
+                    <line x1="2" y1="12" x2="22" y2="12" />
+                    <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z" />
                   </svg>
                 </a>
                 {/* Facebook */}
@@ -782,7 +882,7 @@ const Home: React.FC = () => {
                   className="w-10 h-10 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-slate-400 hover:bg-blue-600 hover:text-white hover:border-blue-500 transition-all group"
                   title="Facebook">
                   <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
-                    <path d="M24 12.073C24 5.405 18.627 0 12 0S0 5.405 0 12.073C0 18.1 4.388 23.094 10.125 24v-8.437H7.078v-3.49h3.047V9.41c0-3.025 1.792-4.697 4.533-4.697 1.312 0 2.686.236 2.686.236v2.97h-1.514c-1.491 0-1.956.93-1.956 1.886v2.268h3.328l-.532 3.49h-2.796V24C19.612 23.094 24 18.1 24 12.073z"/>
+                    <path d="M24 12.073C24 5.405 18.627 0 12 0S0 5.405 0 12.073C0 18.1 4.388 23.094 10.125 24v-8.437H7.078v-3.49h3.047V9.41c0-3.025 1.792-4.697 4.533-4.697 1.312 0 2.686.236 2.686.236v2.97h-1.514c-1.491 0-1.956.93-1.956 1.886v2.268h3.328l-.532 3.49h-2.796V24C19.612 23.094 24 18.1 24 12.073z" />
                   </svg>
                 </a>
                 {/* Instagram */}
@@ -790,7 +890,7 @@ const Home: React.FC = () => {
                   className="w-10 h-10 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-slate-400 hover:bg-gradient-to-tr hover:from-yellow-400 hover:via-pink-500 hover:to-purple-600 hover:text-white hover:border-pink-500 transition-all group"
                   title="Instagram">
                   <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
-                    <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 1 0 0 12.324 6.162 6.162 0 0 0 0-12.324zM12 16a4 4 0 1 1 0-8 4 4 0 0 1 0 8zm6.406-11.845a1.44 1.44 0 1 0 0 2.881 1.44 1.44 0 0 0 0-2.881z"/>
+                    <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 1 0 0 12.324 6.162 6.162 0 0 0 0-12.324zM12 16a4 4 0 1 1 0-8 4 4 0 0 1 0 8zm6.406-11.845a1.44 1.44 0 1 0 0 2.881 1.44 1.44 0 0 0 0-2.881z" />
                   </svg>
                 </a>
               </div>
