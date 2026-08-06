@@ -12,8 +12,8 @@ const PrivateRoute: React.FC<PrivateRouteProps> = ({ allowedRoles }) => {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-background">
-        <div className="w-8 h-8 border-4 border-primary/30 border-t-primary rounded-full animate-spin"></div>
+      <div className="min-h-screen flex items-center justify-center bg-slate-950">
+        <div className="w-8 h-8 border-2 border-slate-700 border-t-blue-500 rounded-full animate-spin"></div>
       </div>
     );
   }
@@ -25,7 +25,9 @@ const PrivateRoute: React.FC<PrivateRouteProps> = ({ allowedRoles }) => {
 
   if (allowedRoles && !allowedRoles.includes(user.role)) {
     // Role not authorized, redirect to their respective dashboard
-    const fallbackPath = user.role === 'teacher' ? '/teacher/dashboard' : '/student/dashboard';
+    const fallbackPath = 
+      user.role === 'admin'   ? '/admin/dashboard'   :
+      user.role === 'teacher' ? '/teacher/dashboard' : '/student/dashboard';
     return <Navigate to={fallbackPath} replace />;
   }
 

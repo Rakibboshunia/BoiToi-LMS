@@ -26,70 +26,90 @@ import TeacherAssignments from './pages/Teacher/Assignments';
 import MyCertificates from './pages/Student/Certificates';
 import Checkout from './pages/Checkout';
 
+// Admin Pages
+import AdminDashboard from './pages/Admin/Dashboard';
+import AdminUsers from './pages/Admin/Users';
+import AdminTeachers from './pages/Admin/Teachers';
+import AdminCourses from './pages/Admin/Courses';
+import AdminPayments from './pages/Admin/Payments';
+import AdminSettings from './pages/Admin/Settings';
+
 // Create a client for react-query
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
-      refetchOnWindowFocus: false,
       retry: 1,
+      refetchOnWindowFocus: false,
     },
   },
 });
 
-function App() {
+const App: React.FC = () => {
   return (
     <QueryClientProvider client={queryClient}>
       <AuthProvider>
         <SocketProvider>
           <Router>
-          <Routes>
-            {/* Public Routes */}
-            <Route path="/" element={<Home />} />
-            <Route path="/login" element={<Login />} />
-            <Route path="/register" element={<Register />} />
-            <Route path="/courses" element={<CourseCatalog />} />
-            <Route path="/courses/:id" element={<CourseDetail />} />
+            <Routes>
+              {/* Public Routes */}
+              <Route path="/" element={<Home />} />
+              <Route path="/login" element={<Login />} />
+              <Route path="/register" element={<Register />} />
+              <Route path="/courses" element={<CourseCatalog />} />
+              <Route path="/courses/:id" element={<CourseDetail />} />
 
-            {/* Student Protected Routes */}
-            <Route element={<PrivateRoute allowedRoles={['student']} />}>
-              <Route element={<DashboardLayout />}>
-                <Route path="/student/dashboard" element={<StudentDashboard />} />
-                <Route path="/student/live" element={<StudentLiveClasses />} />
-                <Route path="/student/assignments" element={<StudentAssignments />} />
-                <Route path="/student/certificates" element={<MyCertificates />} />
+              {/* Student Protected Routes */}
+              <Route element={<PrivateRoute allowedRoles={['student']} />}>
+                <Route element={<DashboardLayout />}>
+                  <Route path="/student/dashboard" element={<StudentDashboard />} />
+                  <Route path="/student/live" element={<StudentLiveClasses />} />
+                  <Route path="/student/assignments" element={<StudentAssignments />} />
+                  <Route path="/student/certificates" element={<MyCertificates />} />
+                </Route>
+                {/* Full-screen views (no sidebar) */}
+                <Route path="/student/quiz/:id" element={<TakeQuiz />} />
+                <Route path="/student/assignments/:id/submit" element={<SubmitAssignment />} />
               </Route>
-              {/* Full-screen views (no sidebar) */}
-              <Route path="/student/quiz/:id" element={<TakeQuiz />} />
-              <Route path="/student/assignments/:id/submit" element={<SubmitAssignment />} />
-            </Route>
 
-            {/* Teacher Protected Routes */}
-            <Route element={<PrivateRoute allowedRoles={['teacher']} />}>
-              <Route element={<DashboardLayout />}>
-                <Route path="/teacher/dashboard" element={<TeacherDashboard />} />
-                <Route path="/teacher/courses" element={<ManageCourses />} />
-                <Route path="/teacher/courses/create" element={<CreateCourse />} />
-                <Route path="/teacher/live" element={<TeacherLiveSessions />} />
-                <Route path="/teacher/assignments" element={<TeacherAssignments />} />
+              {/* Teacher Protected Routes */}
+              <Route element={<PrivateRoute allowedRoles={['teacher']} />}>
+                <Route element={<DashboardLayout />}>
+                  <Route path="/teacher/dashboard" element={<TeacherDashboard />} />
+                  <Route path="/teacher/courses" element={<ManageCourses />} />
+                  <Route path="/teacher/courses/create" element={<CreateCourse />} />
+                  <Route path="/teacher/live" element={<TeacherLiveSessions />} />
+                  <Route path="/teacher/assignments" element={<TeacherAssignments />} />
+                </Route>
+                {/* Full-screen views (no sidebar) */}
+                <Route path="/teacher/courses/:courseId/quiz/create" element={<CreateQuiz />} />
+                <Route path="/teacher/courses/:courseId/assignment/create" element={<CreateAssignment />} />
               </Route>
-              {/* Full-screen views (no sidebar) */}
-              <Route path="/teacher/courses/:courseId/quiz/create" element={<CreateQuiz />} />
-              <Route path="/teacher/courses/:courseId/assignment/create" element={<CreateAssignment />} />
-            </Route>
 
-            {/* Payment Checkout - accessible by authenticated students */}
-            <Route element={<PrivateRoute allowedRoles={['student']} />}>
-              <Route path="/checkout/:courseId" element={<Checkout />} />
-            </Route>
+              {/* Payment Checkout - accessible by authenticated students */}
+              <Route element={<PrivateRoute allowedRoles={['student']} />}>
+                <Route path="/checkout/:courseId" element={<Checkout />} />
+              </Route>
 
-            {/* Shared Protected Routes (Live Room) */}
-            <Route element={<PrivateRoute allowedRoles={['student', 'teacher']} />}>
-              <Route path="/live/:roomId" element={<LiveRoom />} />
-            </Route>
+              {/* Admin Protected Routes */}
+              <Route element={<PrivateRoute allowedRoles={['admin']} />}>
+                <Route element={<DashboardLayout />}>
+                  <Route path="/admin/dashboard" element={<AdminDashboard />} />
+                  <Route path="/admin/users" element={<AdminUsers />} />
+                  <Route path="/admin/teachers" element={<AdminTeachers />} />
+                  <Route path="/admin/courses" element={<AdminCourses />} />
+                  <Route path="/admin/payments" element={<AdminPayments />} />
+                  <Route path="/admin/settings" element={<AdminSettings />} />
+                </Route>
+              </Route>
 
-            {/* 404 */}
-            <Route path="*" element={<div className="p-8 text-center text-xl">404 - Page Not Found</div>} />
-          </Routes>
+              {/* Shared Protected Routes (Live Room) */}
+              <Route element={<PrivateRoute allowedRoles={['student', 'teacher']} />}>
+                <Route path="/live/:roomId" element={<LiveRoom />} />
+              </Route>
+
+              {/* 404 */}
+              <Route path="*" element={<div className="p-8 text-center text-xl text-white">404 - Page Not Found</div>} />
+            </Routes>
           </Router>
         </SocketProvider>
       </AuthProvider>
