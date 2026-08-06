@@ -1,128 +1,142 @@
 import React, { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { Link } from 'react-router-dom';
-import { Plus, Search, Edit, Trash2, MoreVertical } from 'lucide-react';
+import { Plus, Search, Edit, Trash2, BookOpen } from 'lucide-react';
 import { getCourses } from '../../services/courseApi';
-import { useAuth } from '../../context/AuthContext';
 
 const ManageCourses: React.FC = () => {
-  const { user } = useAuth();
   const [searchTerm, setSearchTerm] = useState('');
 
-  // Fetch courses (In a real app, you'd filter by teacher ID on the backend, 
-  // but for now we'll just fetch all and assume the backend handles it or we filter here)
   const { data, isLoading } = useQuery({
     queryKey: ['teacher-courses'],
     queryFn: () => getCourses(),
   });
 
-  const courses = data?.data || [];
+  const courses = (data?.data || []).filter((c: any) =>
+    c.title?.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
+  const cardStyle = {
+    background: 'rgba(255,255,255,0.04)',
+    border: '1px solid rgba(255,255,255,0.08)',
+  };
 
   return (
     <div className="space-y-6">
+      {/* Header */}
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <div>
-          <h1 className="text-2xl font-bold text-foreground">Manage Courses</h1>
-          <p className="text-muted-foreground mt-1">Create, edit, and manage your course catalog.</p>
+          <h1 className="text-2xl font-bold text-white">Manage Courses</h1>
+          <p className="mt-1 text-sm" style={{ color: 'rgba(255,255,255,0.45)' }}>Create, edit, and manage your course catalog.</p>
         </div>
-        
-        <Link 
-          to="/teacher/courses/create" 
-          className="flex items-center gap-2 px-4 py-2 bg-primary text-primary-foreground rounded-md font-medium hover:opacity-90 transition shadow-sm"
+        <Link
+          to="/teacher/courses/create"
+          className="flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-semibold text-white transition-all hover:-translate-y-0.5"
+          style={{ background: 'linear-gradient(135deg,#f97316,#8b5cf6)', boxShadow: '0 4px 15px rgba(249,115,22,0.3)' }}
         >
-          <Plus size={18} />
-          Create Course
+          <Plus size={16} /> Create Course
         </Link>
       </div>
 
-      <div className="bg-background border border-border rounded-xl shadow-sm overflow-hidden">
-        <div className="p-4 border-b border-border flex justify-between items-center bg-secondary/20">
-          <div className="relative w-full max-w-sm">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" size={18} />
-            <input 
-              type="text" 
-              placeholder="Search courses..." 
+      {/* Table Card */}
+      <div className="rounded-2xl overflow-hidden" style={cardStyle}>
+        {/* Search bar */}
+        <div className="p-4" style={{ borderBottom: '1px solid rgba(255,255,255,0.06)' }}>
+          <div className="relative max-w-sm">
+            <Search size={16} className="absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none" style={{ color: 'rgba(255,255,255,0.3)' }} />
+            <input
+              type="text"
+              placeholder="Search courses..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full pl-10 pr-4 py-2 border border-input rounded-md focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent text-sm"
+              className="w-full pl-10 pr-4 py-2.5 rounded-xl text-sm text-white outline-none transition-all"
+              style={{ background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.08)' }}
+              onFocus={e => (e.currentTarget.style.border = '1px solid rgba(249,115,22,0.4)')}
+              onBlur={e => (e.currentTarget.style.border = '1px solid rgba(255,255,255,0.08)')}
             />
           </div>
         </div>
 
         {isLoading ? (
-          <div className="p-8 text-center text-muted-foreground">Loading courses...</div>
+          <div className="p-12 text-center" style={{ color: 'rgba(255,255,255,0.4)' }}>
+            <div className="w-6 h-6 border-2 border-white/20 border-t-orange-400 rounded-full animate-spin mx-auto mb-3" />
+            Loading courses...
+          </div>
         ) : courses.length === 0 ? (
-          <div className="p-12 text-center">
-            <div className="w-16 h-16 bg-secondary rounded-full flex items-center justify-center mx-auto mb-4 text-muted-foreground">
-              <BookOpen size={32} />
+          <div className="p-16 flex flex-col items-center gap-4">
+            <div className="w-16 h-16 rounded-2xl flex items-center justify-center"
+              style={{ background: 'rgba(249,115,22,0.12)', border: '1px solid rgba(249,115,22,0.2)' }}>
+              <BookOpen size={28} style={{ color: '#f97316' }} />
             </div>
-            <h3 className="text-lg font-medium text-foreground">No courses yet</h3>
-            <p className="text-muted-foreground mt-1 mb-6">Get started by creating your first course.</p>
-            <Link 
-              to="/teacher/courses/create" 
-              className="inline-flex items-center gap-2 px-4 py-2 bg-primary text-primary-foreground rounded-md font-medium hover:opacity-90 transition shadow-sm"
-            >
-              <Plus size={18} />
-              Create Course
+            <div className="text-center">
+              <p className="font-semibold text-white mb-1">No courses yet</p>
+              <p className="text-sm" style={{ color: 'rgba(255,255,255,0.4)' }}>Get started by creating your first course.</p>
+            </div>
+            <Link to="/teacher/courses/create"
+              className="flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-semibold text-white transition-all hover:-translate-y-0.5"
+              style={{ background: 'linear-gradient(135deg,#f97316,#8b5cf6)', boxShadow: '0 4px 15px rgba(249,115,22,0.3)' }}>
+              <Plus size={16} /> Create Course
             </Link>
           </div>
         ) : (
           <div className="overflow-x-auto">
-            <table className="w-full text-left text-sm">
-              <thead className="bg-secondary/30 text-muted-foreground border-b border-border">
+            <table className="w-full text-sm">
+              <thead style={{ borderBottom: '1px solid rgba(255,255,255,0.06)' }}>
                 <tr>
-                  <th className="font-medium p-4">Course</th>
-                  <th className="font-medium p-4">Price</th>
-                  <th className="font-medium p-4">Status</th>
-                  <th className="font-medium p-4">Students</th>
-                  <th className="font-medium p-4 text-right">Actions</th>
+                  {['Course', 'Price', 'Status', 'Students', 'Actions'].map((h, i) => (
+                    <th key={h} className={`px-5 py-3.5 font-medium text-xs uppercase tracking-wider ${i === 4 ? 'text-right' : 'text-left'}`}
+                      style={{ color: 'rgba(255,255,255,0.35)' }}>
+                      {h}
+                    </th>
+                  ))}
                 </tr>
               </thead>
-              <tbody className="divide-y divide-border">
+              <tbody>
                 {courses.map((course: any) => (
-                  <tr key={course._id} className="hover:bg-secondary/10 transition-colors">
-                    <td className="p-4">
+                  <tr key={course._id} className="transition-colors"
+                    style={{ borderBottom: '1px solid rgba(255,255,255,0.04)' }}
+                    onMouseEnter={e => (e.currentTarget.style.background = 'rgba(255,255,255,0.03)')}
+                    onMouseLeave={e => (e.currentTarget.style.background = 'transparent')}>
+                    <td className="px-5 py-4">
                       <div className="flex items-center gap-3">
-                        <div className="w-12 h-12 bg-secondary rounded-md overflow-hidden shrink-0">
-                          {course.thumbnail ? (
-                            <img src={course.thumbnail} alt={course.title} className="w-full h-full object-cover" />
-                          ) : (
-                            <div className="w-full h-full flex items-center justify-center text-muted-foreground text-xs">No img</div>
-                          )}
+                        <div className="w-12 h-12 rounded-xl overflow-hidden flex-shrink-0 flex items-center justify-center"
+                          style={{ background: 'rgba(255,255,255,0.06)' }}>
+                          {course.thumbnail
+                            ? <img src={course.thumbnail} alt={course.title} className="w-full h-full object-cover" />
+                            : <BookOpen size={18} style={{ color: 'rgba(255,255,255,0.3)' }} />}
                         </div>
                         <div>
-                          <p className="font-medium text-foreground line-clamp-1">{course.title}</p>
-                          <p className="text-xs text-muted-foreground">{course.category}</p>
+                          <p className="font-medium text-white line-clamp-1">{course.title}</p>
+                          <p className="text-xs mt-0.5" style={{ color: 'rgba(255,255,255,0.35)' }}>{course.category}</p>
                         </div>
                       </div>
                     </td>
-                    <td className="p-4">
-                      {course.isFree ? (
-                        <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800">Free</span>
-                      ) : (
-                        <span className="font-medium">${course.price}</span>
-                      )}
+                    <td className="px-5 py-4">
+                      {course.isFree
+                        ? <span className="text-xs font-semibold px-2.5 py-1 rounded-full" style={{ background: 'rgba(34,197,94,0.15)', color: '#4ade80', border: '1px solid rgba(34,197,94,0.2)' }}>Free</span>
+                        : <span className="text-sm font-medium text-white">${course.price}</span>}
                     </td>
-                    <td className="p-4">
-                      {course.isPublished ? (
-                        <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800">Published</span>
-                      ) : (
-                        <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-gray-100 text-gray-800">Draft</span>
-                      )}
+                    <td className="px-5 py-4">
+                      {course.isPublished
+                        ? <span className="text-xs font-semibold px-2.5 py-1 rounded-full" style={{ background: 'rgba(59,130,246,0.15)', color: '#60a5fa', border: '1px solid rgba(59,130,246,0.2)' }}>Published</span>
+                        : <span className="text-xs font-semibold px-2.5 py-1 rounded-full" style={{ background: 'rgba(255,255,255,0.07)', color: 'rgba(255,255,255,0.45)', border: '1px solid rgba(255,255,255,0.1)' }}>Draft</span>}
                     </td>
-                    <td className="p-4 text-muted-foreground">
+                    <td className="px-5 py-4 text-sm" style={{ color: 'rgba(255,255,255,0.55)' }}>
                       {course.enrollmentCount || 0}
                     </td>
-                    <td className="p-4 text-right">
-                      <div className="flex items-center justify-end gap-2">
-                        <button className="p-2 text-muted-foreground hover:text-primary transition-colors" title="Edit">
-                          <Edit size={18} />
+                    <td className="px-5 py-4">
+                      <div className="flex items-center justify-end gap-1">
+                        <button className="p-2 rounded-lg transition-all" title="Edit"
+                          style={{ color: 'rgba(255,255,255,0.4)' }}
+                          onMouseEnter={e => { e.currentTarget.style.background = 'rgba(249,115,22,0.15)'; e.currentTarget.style.color = '#f97316'; }}
+                          onMouseLeave={e => { e.currentTarget.style.background = 'transparent'; e.currentTarget.style.color = 'rgba(255,255,255,0.4)'; }}>
+                          <Edit size={16} />
                         </button>
-                        <button className="p-2 text-muted-foreground hover:text-destructive transition-colors" title="Delete">
-                          <Trash2 size={18} />
-                        </button>
-                        <button className="p-2 text-muted-foreground hover:text-foreground transition-colors" title="More">
-                          <MoreVertical size={18} />
+                        <button className="p-2 rounded-lg transition-all" title="Delete"
+                          style={{ color: 'rgba(255,255,255,0.4)' }}
+                          onMouseEnter={e => { e.currentTarget.style.background = 'rgba(239,68,68,0.15)'; e.currentTarget.style.color = '#f87171'; }}
+                          onMouseLeave={e => { e.currentTarget.style.background = 'transparent'; e.currentTarget.style.color = 'rgba(255,255,255,0.4)'; }}>
+                          <Trash2 size={16} />
                         </button>
                       </div>
                     </td>
@@ -136,8 +150,5 @@ const ManageCourses: React.FC = () => {
     </div>
   );
 };
-
-// Also import BookOpen for the empty state
-import { BookOpen } from 'lucide-react';
 
 export default ManageCourses;

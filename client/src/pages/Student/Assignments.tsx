@@ -1,75 +1,131 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { FileText, Clock, CheckCircle, AlertCircle } from 'lucide-react';
+import { getStudentDashboard } from '../../services/dashboardApi';
+import { getAssignmentsForCourse } from '../../services/assignmentApi';
+import toast from 'react-hot-toast';
+import Loader from '../../components/Loader';
 
-// Mock data – in production this would come from useQuery(() => getAssignmentsForCourse(courseId))
-const mockAssignments = [
-  { id: '1', title: 'Build a REST API', dueDate: '2026-08-05', submissionStatus: 'submitted', grade: null, maxScore: 100 },
-  { id: '2', title: 'React Final Project', dueDate: '2026-08-12', submissionStatus: 'pending', grade: null, maxScore: 100 },
-  { id: '3', title: 'Database Schema Design', dueDate: '2026-07-20', submissionStatus: 'graded', grade: 88, maxScore: 100 },
-];
-
-const statusConfig: Record<string, { label: string; icon: React.ElementType; color: string }> = {
-  pending:    { label: 'Pending',   icon: Clock,        color: 'text-orange-600 bg-orange-100' },
-  submitted:  { label: 'Submitted', icon: CheckCircle,  color: 'text-blue-600 bg-blue-100' },
-  graded:     { label: 'Graded',    icon: CheckCircle,  color: 'text-green-600 bg-green-100' },
-  late:       { label: 'Late',      icon: AlertCircle,  color: 'text-red-600 bg-red-100' },
+const statusConfig: Record<string, { label: string; icon: React.ElementType; bg: string; color: string; border: string }> = {
+  pending:   { label: 'Pending',   icon: Clock,        bg: 'rgba(249,115,22,0.12)', color: '#fb923c', border: 'rgba(249,115,22,0.25)' },
+  submitted: { label: 'Submitted', icon: CheckCircle,  bg: 'rgba(59,130,246,0.12)', color: '#60a5fa', border: 'rgba(59,130,246,0.25)' },
+  graded:    { label: 'Graded',    icon: CheckCircle,  bg: 'rgba(34,197,94,0.12)',  color: '#4ade80', border: 'rgba(34,197,94,0.25)' },
+  late:      { label: 'Late',      icon: AlertCircle,  bg: 'rgba(239,68,68,0.12)',  color: '#f87171', border: 'rgba(239,68,68,0.25)' },
 };
 
 const StudentAssignments: React.FC = () => {
+  const [assignments, setAssignments] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchAllAssignments = async () => {
+      try {
+        const dashRes = await getStudentDashboard();
+        if (dashRes.success && dashRes.data.enrolledCourses) {
+          const courses = dashRes.data.enrolledCourses;
+          let allAssignments: any[] = [];
+          
+          for (const course of courses) {
+            try {
+              const assignRes = await getAssignmentsForCourse(course._id);
+              if (assignRes.success && assignRes.data) {
+                // Attach course title
+                const withCourseTitle = assignRes.data.map((a: any) => ({
+                  ...a,
+                  courseTitle: course.title
+                }));
+                allAssignments = [...allAssignments, ...withCourseTitle];
+              }
+            } catch (err) {
+              console.error(`Failed to fetch assignments for course ${course._id}:`, err);
+            }
+          }
+          
+          // Sort by due date
+          allAssignments.sort((a, b) => new Date(a.dueDate).getTime() - new Date(b.dueDate).getTime());
+          setAssignments(allAssignments);
+        } else if (!dashRes.success) {
+          toast.error(dashRes.error || 'Failed to fetch enrolled courses');
+        }
+      } catch (error) {
+        toast.error('Failed to fetch assignments');
+      } finally {
+        setLoading(false);
+      }
+    };
+    
+    fetchAllAssignments();
+  }, []);
+
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-2xl font-bold text-foreground">Assignments</h1>
-        <p className="text-muted-foreground mt-1">Track and submit your coursework.</p>
+        <h1 className="text-2xl font-bold text-white">Assignments</h1>
+        <p className="mt-1 text-sm" style={{ color: 'rgba(255,255,255,0.45)' }}>Track and submit your coursework.</p>
       </div>
 
-      <div className="space-y-4">
-        {mockAssignments.map((assignment) => {
-          const status = statusConfig[assignment.submissionStatus] || statusConfig.pending;
-          const StatusIcon = status.icon;
-          const isOverdue = new Date(assignment.dueDate) < new Date() && assignment.submissionStatus === 'pending';
+      <div className="space-y-3">
+        {loading ? (
+          <Loader message="Loading assignments..." />
+        ) : assignments.length === 0 ? (
+          <div className="rounded-2xl p-16 text-center flex flex-col items-center"
+            style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.08)' }}>
+            <div className="w-16 h-16 rounded-2xl flex items-center justify-center mb-4"
+              style={{ background: 'rgba(139,92,246,0.15)', border: '1px solid rgba(139,92,246,0.2)' }}>
+              <FileText size={28} style={{ color: '#a78bfa' }} />
+            </div>
+            <p className="font-semibold text-white mb-1">No assignments found</p>
+            <p className="text-sm" style={{ color: 'rgba(255,255,255,0.4)' }}>You don't have any pending or submitted assignments.</p>
+          </div>
+        ) : assignments.map((assignment) => {
+            const status = statusConfig[assignment.submissionStatus] || statusConfig.pending;
+            const StatusIcon = status.icon;
+            const isOverdue = new Date(assignment.dueDate) < new Date() && assignment.submissionStatus === 'pending';
 
-          return (
-            <div key={assignment.id} className="bg-background border border-border rounded-xl p-6 shadow-sm flex flex-col sm:flex-row sm:items-center gap-4 sm:gap-6">
-              <div className="w-12 h-12 bg-primary/10 text-primary rounded-xl flex items-center justify-center shrink-0">
-                <FileText size={24} />
+            return (
+              <div key={assignment._id}
+                className="rounded-2xl p-5 flex flex-col sm:flex-row sm:items-center gap-4 transition-all duration-200 hover:-translate-y-0.5"
+              style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.08)' }}
+              onMouseEnter={e => (e.currentTarget.style.background = 'rgba(255,255,255,0.06)')}
+              onMouseLeave={e => (e.currentTarget.style.background = 'rgba(255,255,255,0.04)')}>
+
+              <div className="w-12 h-12 rounded-xl flex items-center justify-center flex-shrink-0"
+                style={{ background: 'rgba(139,92,246,0.15)', border: '1px solid rgba(139,92,246,0.2)' }}>
+                <FileText size={22} style={{ color: '#a78bfa' }} />
               </div>
 
               <div className="flex-1 min-w-0">
-                <h3 className="font-semibold text-lg text-foreground">{assignment.title}</h3>
-                <div className="flex flex-wrap gap-3 mt-1.5 text-sm text-muted-foreground items-center">
+                <h3 className="font-semibold text-white">{assignment.title}</h3>
+                <p className="text-xs text-white/50 mb-1.5">{assignment.courseTitle}</p>
+                <div className="flex flex-wrap gap-3 items-center text-xs" style={{ color: 'rgba(255,255,255,0.4)' }}>
                   <span className="flex items-center gap-1">
-                    <Clock size={14} />
+                    <Clock size={12} />
                     Due: {new Date(assignment.dueDate).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
                   </span>
-                  {isOverdue && (
-                    <span className="text-red-600 font-medium">· Overdue!</span>
-                  )}
-                  <span>Max Score: {assignment.maxScore}</span>
+                  {isOverdue && <span className="font-semibold" style={{ color: '#f87171' }}>· Overdue!</span>}
+                  <span>Max: {assignment.maxScore} pts</span>
                 </div>
               </div>
 
-              <div className="flex items-center gap-4 shrink-0">
-                <span className={`inline-flex items-center gap-1.5 text-xs font-semibold px-3 py-1.5 rounded-full ${status.color}`}>
-                  <StatusIcon size={13} />
+              <div className="flex items-center gap-3 flex-shrink-0">
+                <span className="inline-flex items-center gap-1.5 text-xs font-semibold px-3 py-1.5 rounded-full"
+                  style={{ background: status.bg, color: status.color, border: `1px solid ${status.border}` }}>
+                  <StatusIcon size={12} />
                   {status.label}
-                  {assignment.submissionStatus === 'graded' && assignment.grade !== null && ` · ${assignment.grade}/${assignment.maxScore}`}
+                  {assignment.submissionStatus === 'graded' && assignment.submissionGrade != null && ` · ${assignment.submissionGrade}/${assignment.maxScore}`}
                 </span>
 
                 {assignment.submissionStatus === 'pending' && (
-                  <Link
-                    to={`/student/assignments/${assignment.id}/submit`}
-                    className="px-4 py-2 bg-primary text-primary-foreground text-sm font-medium rounded-lg hover:opacity-90 transition"
-                  >
+                  <Link to={`/student/assignments/${assignment._id}/submit`}
+                    className="px-4 py-2 rounded-xl text-xs font-semibold text-white transition-all hover:-translate-y-0.5"
+                    style={{ background: 'linear-gradient(135deg,#3b82f6,#8b5cf6)' }}>
                     Submit
                   </Link>
                 )}
                 {assignment.submissionStatus === 'submitted' && (
-                  <Link
-                    to={`/student/assignments/${assignment.id}/submit`}
-                    className="px-4 py-2 border border-input text-sm font-medium rounded-lg hover:bg-secondary transition"
-                  >
+                  <Link to={`/student/assignments/${assignment._id}/submit`}
+                    className="px-4 py-2 rounded-xl text-xs font-semibold transition-all"
+                    style={{ background: 'rgba(255,255,255,0.07)', border: '1px solid rgba(255,255,255,0.12)', color: 'rgba(255,255,255,0.7)' }}>
                     Re-submit
                   </Link>
                 )}

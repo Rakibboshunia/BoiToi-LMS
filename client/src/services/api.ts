@@ -32,9 +32,18 @@ api.interceptors.response.use(
     if (error.response?.status === 401 && !originalRequest._retry) {
       originalRequest._retry = true;
 
+      const accessToken = localStorage.getItem("accessToken");
+      const refreshToken = localStorage.getItem("refreshToken");
+
+      // 🚧 DEV BYPASS: Skip refresh for fake dev tokens — just ignore the 401
+      if (
+        accessToken === "fake-access-token-for-testing" ||
+        refreshToken === "fake-refresh-token-for-testing"
+      ) {
+        return Promise.reject(error);
+      }
+
       try {
-        const refreshToken = localStorage.getItem("refreshToken");
-        
         if (!refreshToken) {
            // No refresh token, force logout
            localStorage.removeItem("accessToken");

@@ -1,6 +1,9 @@
 const jwt = require("jsonwebtoken");
 const User = require("../models/User");
 const { sendTokenResponse } = require("../utils/jwtToken");
+const cloudinary = require("../config/cloudinary");
+const streamifier = require("streamifier");
+
 
 // @desc    Register user
 // @route   POST /api/auth/register
@@ -120,6 +123,60 @@ exports.logout = async (req, res, next) => {
       success: true,
       data: {}
     });
+  } catch (err) {
+    next(err);
+  }
+};
+
+// @desc    Update user details
+// @route   PUT /api/auth/updatedetails
+// @access  Private
+exports.updateDetails = async (req, res, next) => {
+  try {
+    const fieldsToUpdate = {
+      name: req.body.name,
+      email: req.body.email,
+    };
+    if (req.body.bio !== undefined) fieldsToUpdate.bio = req.body.bio;
+
+    const user = await User.findByIdAndUpdate(req.user.id, fieldsToUpdate, {
+      new: true,
+      runValidators: true,
+    });
+
+    res.status(200).json({
+      success: true,
+      data: user,
+    });
+  } catch (err) {
+    next(err);
+  }
+};
+
+// @desc    Upload user avatar
+// @route   PUT /api/auth/avatar
+// @access  Private
+exports.uploadAvatar = async (req, res, next) => {
+  try {
+    const { avatar } = req.body; // base64 data URI
+
+    if (!avatar) {
+      return res.status(400).json({ success: false, error: "No image provided" });
+    }
+
+    // Upload to Cloudinary
+    const uploadResult = await cloudinary.uploader.upload(avatar, {
+      folder: "lms/avatars",
+      transformation: [{ width: 400, height: 400, crop: "fill", gravity: "face" }],
+    });
+
+    const user = await User.findByIdAndUpdate(
+      req.user.id,
+      { avatar: uploadResult.secure_url },
+      { new: true }
+    );
+
+    res.status(200).json({ success: true, data: user });
   } catch (err) {
     next(err);
   }

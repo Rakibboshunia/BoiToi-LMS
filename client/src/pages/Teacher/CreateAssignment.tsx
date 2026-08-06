@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { ArrowLeft, Upload, Paperclip } from 'lucide-react';
+import toast from 'react-hot-toast';
 
 const CreateAssignment: React.FC = () => {
   const navigate = useNavigate();
@@ -17,7 +18,7 @@ const CreateAssignment: React.FC = () => {
   const onSubmit = (data: any) => {
     // In a real app, you would upload files to Cloudinary here, get the URLs, 
     // and submit the full payload via assignmentApi.createAssignment
-    alert('Assignment created! (Demo)');
+    toast.success('Assignment created! (Demo)');
     navigate('/teacher/courses');
   };
 

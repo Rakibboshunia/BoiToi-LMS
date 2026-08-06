@@ -54,6 +54,7 @@ app.use("/api/assignments", require("./routes/assignments"));
 app.use("/api/certificates", require("./routes/certificates"));
 app.use("/api/payments", require("./routes/payments"));
 app.use("/api/notifications", require("./routes/notifications"));
+app.use("/api/dashboard", require("./routes/dashboard"));
 
 // Error Handler Middleware
 app.use(errorHandler);

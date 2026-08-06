@@ -2,6 +2,7 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { AuthProvider } from './context/AuthContext';
 import { SocketProvider } from './context/SocketContext';
+import { Toaster } from 'react-hot-toast';
 import PrivateRoute from './routes/PrivateRoute';
 import Home from './pages/Home';
 import Login from './pages/Login';
@@ -25,6 +26,9 @@ import StudentAssignments from './pages/Student/Assignments';
 import TeacherAssignments from './pages/Teacher/Assignments';
 import MyCertificates from './pages/Student/Certificates';
 import Checkout from './pages/Checkout';
+import MyCourses from './pages/Student/MyCourses';
+import Payments from './pages/Student/Payments';
+import Profile from './pages/Student/Profile';
 
 // Admin Pages
 import AdminDashboard from './pages/Admin/Dashboard';
@@ -50,6 +54,30 @@ const App: React.FC = () => {
       <AuthProvider>
         <SocketProvider>
           <Router>
+            <Toaster
+              position="top-right"
+              toastOptions={{
+                duration: 3500,
+                style: {
+                  background: 'rgba(20,15,50,0.95)',
+                  color: '#fff',
+                  border: '1px solid rgba(255,255,255,0.1)',
+                  backdropFilter: 'blur(16px)',
+                  borderRadius: '12px',
+                  fontSize: '13px',
+                  fontWeight: '500',
+                  boxShadow: '0 8px 32px rgba(0,0,0,0.4)',
+                },
+                success: {
+                  iconTheme: { primary: '#4ade80', secondary: 'transparent' },
+                  style: { borderColor: 'rgba(74,222,128,0.25)' },
+                },
+                error: {
+                  iconTheme: { primary: '#f87171', secondary: 'transparent' },
+                  style: { borderColor: 'rgba(248,113,113,0.25)' },
+                },
+              }}
+            />
             <Routes>
               {/* Public Routes */}
               <Route path="/" element={<Home />} />
@@ -65,6 +93,9 @@ const App: React.FC = () => {
                   <Route path="/student/live" element={<StudentLiveClasses />} />
                   <Route path="/student/assignments" element={<StudentAssignments />} />
                   <Route path="/student/certificates" element={<MyCertificates />} />
+                  <Route path="/student/courses" element={<MyCourses />} />
+                  <Route path="/student/payments" element={<Payments />} />
+                  <Route path="/student/profile" element={<Profile />} />
                 </Route>
                 {/* Full-screen views (no sidebar) */}
                 <Route path="/student/quiz/:id" element={<TakeQuiz />} />
@@ -79,6 +110,10 @@ const App: React.FC = () => {
                   <Route path="/teacher/courses/create" element={<CreateCourse />} />
                   <Route path="/teacher/live" element={<TeacherLiveSessions />} />
                   <Route path="/teacher/assignments" element={<TeacherAssignments />} />
+                  {/* Placeholder routes for sidebar links */}
+                  <Route path="/teacher/students" element={<div className="p-8 text-center text-white/60">My Students — Coming Soon</div>} />
+                  <Route path="/teacher/earnings" element={<div className="p-8 text-center text-white/60">Earnings — Coming Soon</div>} />
+                  <Route path="/teacher/settings" element={<div className="p-8 text-center text-white/60">Settings — Coming Soon</div>} />
                 </Route>
                 {/* Full-screen views (no sidebar) */}
                 <Route path="/teacher/courses/:courseId/quiz/create" element={<CreateQuiz />} />

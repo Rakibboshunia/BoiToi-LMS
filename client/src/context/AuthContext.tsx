@@ -15,9 +15,10 @@ interface AuthContextType {
   user: User | null;
   isAuthenticated: boolean;
   isLoading: boolean;
-  login: (data: any) => Promise<void>;
-  register: (data: any) => Promise<void>;
+  login: (data: any) => Promise<any>;
+  register: (data: any) => Promise<any>;
   logout: () => void;
+  updateProfile: (data: any) => Promise<any>;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -35,15 +36,17 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       if (storedUser && token) {
         setUser(JSON.parse(storedUser));
         setIsAuthenticated(true);
-        // Optionally fetch fresh user data from /api/auth/me here
-        try {
-           const res = await api.get('/auth/me');
-           if (res.data.success) {
-               setUser(res.data.data);
-               localStorage.setItem('user', JSON.stringify(res.data.data));
-           }
-        } catch (error) {
-           console.error("Failed to fetch fresh user data");
+        // 🚧 FAKE LOGIN: Skip /auth/me call when using fake token
+        if (token !== 'fake-access-token-for-testing') {
+          try {
+             const res = await api.get('/auth/me');
+             if (res.data.success) {
+                 setUser(res.data.data);
+                 localStorage.setItem('user', JSON.stringify(res.data.data));
+             }
+          } catch (error) {
+             console.error("Failed to fetch fresh user data");
+          }
         }
       }
       setIsLoading(false);
@@ -53,16 +56,42 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   }, []);
 
   const login = async (credentials: any) => {
-    const res = await api.post('/auth/login', credentials);
-    if (res.data.success) {
-      const { accessToken, refreshToken, user: userData } = res.data;
-      localStorage.setItem('accessToken', accessToken);
-      localStorage.setItem('refreshToken', refreshToken);
-      localStorage.setItem('user', JSON.stringify(userData));
-      setUser(userData);
-      setIsAuthenticated(true);
-    }
-    return res.data;
+    // =============================================
+    // 🚧 FAKE LOGIN BYPASS — Testing Only
+    // যেকোনো email ও password দিলেই login হবে।
+    // email-এ 'teacher' থাকলে teacher role, নাহলে student।
+    // Production-এ এই block টি সরিয়ে নিচের real API call uncomment করুন।
+    // =============================================
+    const isTeacher = credentials.email?.toLowerCase().includes('teacher');
+    const fakeUser: User = {
+      _id: 'fake-user-001',
+      name: isTeacher ? 'Test Teacher' : 'Test Student',
+      email: credentials.email,
+      role: isTeacher ? 'teacher' : 'student',
+      avatar: undefined,
+      isActive: true,
+      isApproved: isTeacher ? true : undefined,
+    };
+    const fakeToken = 'fake-access-token-for-testing';
+    localStorage.setItem('accessToken', fakeToken);
+    localStorage.setItem('refreshToken', 'fake-refresh-token-for-testing');
+    localStorage.setItem('user', JSON.stringify(fakeUser));
+    setUser(fakeUser);
+    setIsAuthenticated(true);
+    return { success: true, user: fakeUser };
+    // =============================================
+    // ✅ Real API call (uncomment for production):
+    // const res = await api.post('/auth/login', credentials);
+    // if (res.data.success) {
+    //   const { accessToken, refreshToken, user: userData } = res.data;
+    //   localStorage.setItem('accessToken', accessToken);
+    //   localStorage.setItem('refreshToken', refreshToken);
+    //   localStorage.setItem('user', JSON.stringify(userData));
+    //   setUser(userData);
+    //   setIsAuthenticated(true);
+    // }
+    // return res.data;
+    // =============================================
   };
 
   const register = async (userData: any) => {
@@ -89,8 +118,26 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     setIsAuthenticated(false);
   };
 
+  const updateProfile = async (userData: any) => {
+    const token = localStorage.getItem('accessToken');
+    if (token === 'fake-access-token-for-testing') {
+      const updatedUser = { ...user, ...userData } as User;
+      setUser(updatedUser);
+      localStorage.setItem('user', JSON.stringify(updatedUser));
+      return { success: true, data: updatedUser };
+    }
+
+    const res = await api.put('/auth/updatedetails', userData);
+    if (res.data.success) {
+      const updatedUser = res.data.data;
+      setUser(updatedUser);
+      localStorage.setItem('user', JSON.stringify(updatedUser));
+    }
+    return res.data;
+  };
+
   return (
-    <AuthContext.Provider value={{ user, isAuthenticated, isLoading, login, register, logout }}>
+    <AuthContext.Provider value={{ user, isAuthenticated, isLoading, login, register, logout, updateProfile }}>
       {children}
     </AuthContext.Provider>
   );

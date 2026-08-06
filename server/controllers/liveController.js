@@ -42,7 +42,7 @@ exports.scheduleLiveClass = async (req, res, next) => {
 // @access  Private (Teacher only)
 exports.updateLiveStatus = async (req, res, next) => {
   try {
-    const { status } = req.body;
+    const { status, recordingUrl } = req.body;
     let liveClass = await LiveClass.findById(req.params.id);
 
     if (!liveClass) {
@@ -55,7 +55,10 @@ exports.updateLiveStatus = async (req, res, next) => {
 
     const updates = { status };
     if (status === "ongoing") updates.startedAt = Date.now();
-    if (status === "completed") updates.endedAt = Date.now();
+    if (status === "completed") {
+      updates.endedAt = Date.now();
+      if (recordingUrl) updates.recordingUrl = recordingUrl;
+    }
 
     liveClass = await LiveClass.findByIdAndUpdate(req.params.id, updates, {
       new: true,

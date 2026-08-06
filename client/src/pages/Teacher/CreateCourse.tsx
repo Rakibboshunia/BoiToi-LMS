@@ -29,7 +29,8 @@ const CreateCourse: React.FC = () => {
     watch,
     formState: { errors, isSubmitting },
   } = useForm<CourseFormValues>({
-    resolver: zodResolver(courseSchema),
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    resolver: zodResolver(courseSchema) as any,
     defaultValues: {
       level: 'beginner',
       price: 0,
@@ -75,7 +76,7 @@ const CreateCourse: React.FC = () => {
         </div>
       )}
 
-      <form onSubmit={handleSubmit(onSubmit)} className="bg-background border border-border rounded-xl shadow-sm p-6 space-y-6">
+      <form onSubmit={handleSubmit(onSubmit as any)} className="bg-background border border-border rounded-xl shadow-sm p-6 space-y-6">
         
         <div className="space-y-4">
           <h3 className="text-lg font-semibold border-b border-border pb-2">Basic Information</h3>
@@ -110,10 +111,14 @@ const CreateCourse: React.FC = () => {
                 className="w-full px-4 py-2 border border-input rounded-md focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent bg-background"
               >
                 <option value="">Select category</option>
-                <option value="Development">Development</option>
-                <option value="Business">Business</option>
-                <option value="Design">Design</option>
-                <option value="Marketing">Marketing</option>
+                <option value="Web Development">Web Development</option>
+                <option value="Data Science">Data Science</option>
+                <option value="AI & ML">AI & ML</option>
+                <option value="Mobile Dev">Mobile Dev</option>
+                <option value="DevOps & Cloud">DevOps & Cloud</option>
+                <option value="Cybersecurity">Cybersecurity</option>
+                <option value="Software Testing">Software Testing</option>
+                <option value="System Design">System Design</option>
               </select>
               {errors.category && <p className="text-destructive text-xs mt-1">{errors.category.message}</p>}
             </div>

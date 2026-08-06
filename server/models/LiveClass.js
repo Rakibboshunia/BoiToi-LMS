@@ -45,6 +45,10 @@ const liveClassSchema = new mongoose.Schema(
     endedAt: {
       type: Date,
     },
+    recordingUrl: {
+      type: String,
+      default: "",
+    },
   },
   {
     timestamps: true,
