@@ -45,6 +45,8 @@ app.get("/", (req, res) => {
 
 // API Routes
 app.use("/api/auth", require("./routes/auth"));
+app.use("/api/admin", require("./routes/admin"));
+app.use("/api/student", require("./routes/student"));
 app.use("/api/courses", require("./routes/courses"));
 app.use("/api/live", require("./routes/live"));
 app.use("/api/quizzes", require("./routes/quizzes"));
@@ -52,7 +54,6 @@ app.use("/api/assignments", require("./routes/assignments"));
 app.use("/api/certificates", require("./routes/certificates"));
 app.use("/api/payments", require("./routes/payments"));
 app.use("/api/notifications", require("./routes/notifications"));
-// ...
 
 // Error Handler Middleware
 app.use(errorHandler);
