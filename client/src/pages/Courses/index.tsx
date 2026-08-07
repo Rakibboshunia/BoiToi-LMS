@@ -26,66 +26,50 @@ const CourseCatalog: React.FC = () => {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
+  // Debounced search state sent to server
+  const [serverSearch, setServerSearch] = useState(initialSearch);
+  const [serverCategory, setServerCategory] = useState(initialCategory || '');
+
   const { data, isLoading } = useQuery({
-    queryKey: ['public-courses'],
-    queryFn: () => getCourses(),
+    queryKey: ['public-courses', serverSearch, serverCategory, selectedLevels[0] || ''],
+    queryFn: () => getCourses({
+      ...(serverSearch ? { search: serverSearch } : {}),
+      ...(serverCategory ? { category: serverCategory } : {}),
+      ...(selectedLevels.length === 1 ? { level: selectedLevels[0].toLowerCase() } : {}),
+    }),
   });
 
   const courses = data?.data || [];
 
-  // Handlers
+  const handleSearch = (e: React.FormEvent) => {
+    e.preventDefault();
+    setSearchTerm(searchInput);
+    setServerSearch(searchInput);
+  };
+
   const toggleCategory = (cat: string) => {
-    setSelectedCategories(prev => 
-      prev.includes(cat) ? prev.filter(c => c !== cat) : [...prev, cat]
-    );
+    const newCat = selectedCategories.includes(cat) ? '' : cat;
+    setSelectedCategories(selectedCategories.includes(cat) ? [] : [cat]);
+    setServerCategory(newCat);
   };
 
   const toggleLevel = (level: string) => {
-    setSelectedLevels(prev => 
-      prev.includes(level) ? prev.filter(l => l !== level) : [...prev, level]
+    setSelectedLevels(prev =>
+      prev.includes(level) ? prev.filter(l => l !== level) : [level] // single level at a time for server
     );
   };
 
   const togglePrice = (price: string) => {
-    setSelectedPrices(prev => 
+    setSelectedPrices(prev =>
       prev.includes(price) ? prev.filter(p => p !== price) : [...prev, price]
     );
   };
 
-  const handleSearch = (e: React.FormEvent) => {
-    e.preventDefault();
-    setSearchTerm(searchInput);
-  };
-
-  // Derived filtered and sorted courses
+  // Client-side price + sort filtering (server handles search/category/level)
   const filteredCourses = useMemo(() => {
     let result = [...courses];
 
-    // Search filter
-    if (searchTerm) {
-      const lowerSearch = searchTerm.toLowerCase();
-      result = result.filter(course => 
-        course.title?.toLowerCase().includes(lowerSearch) || 
-        course.description?.toLowerCase().includes(lowerSearch) ||
-        course.shortDescription?.toLowerCase().includes(lowerSearch)
-      );
-    }
-
-    // Category filter
-    if (selectedCategories.length > 0) {
-      result = result.filter(course => selectedCategories.includes(course.category));
-    }
-
-    // Level filter
-    if (selectedLevels.length > 0) {
-      // Assuming course.level might be lowercase or capitalized
-      result = result.filter(course => {
-        const cLevel = course.level ? course.level.toLowerCase() : 'all levels';
-        return selectedLevels.some(l => cLevel.includes(l.toLowerCase()));
-      });
-    }
-
-    // Price filter
+    // Price filter (client-side only since server doesn't expose isFree param)
     if (selectedPrices.length > 0) {
       result = result.filter(course => {
         if (selectedPrices.includes('Free') && course.isFree) return true;
@@ -100,11 +84,11 @@ const CourseCatalog: React.FC = () => {
     } else if (sortBy === 'Highest Rated') {
       result.sort((a, b) => (b.rating?.average || 0) - (a.rating?.average || 0));
     } else if (sortBy === 'Most Popular') {
-      result.sort((a, b) => (b.enrolledStudents?.length || 0) - (a.enrolledStudents?.length || 0));
+      result.sort((a, b) => (b.enrollmentCount || 0) - (a.enrollmentCount || 0));
     }
 
     return result;
-  }, [courses, searchTerm, selectedCategories, selectedLevels, selectedPrices, sortBy]);
+  }, [courses, selectedPrices, sortBy]);
 
   return (
     <div className="min-h-screen bg-[#0a0a0e] text-slate-200 font-sans selection:bg-indigo-500/30">

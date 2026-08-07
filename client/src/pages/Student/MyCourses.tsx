@@ -1,28 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { BookOpen, PlayCircle, Star, Clock, ArrowRight } from 'lucide-react';
+import { BookOpen, PlayCircle, ArrowRight, CheckCircle } from 'lucide-react';
 import { Link } from 'react-router-dom';
-import { getStudentDashboard } from '../../services/dashboardApi';
+import { getMyEnrolledCourses } from '../../services/studentApi';
 import toast from 'react-hot-toast';
 import Loader from '../../components/Loader';
-
-const mockEnrolledCourses = [
-  {
-    id: 'course-1',
-    title: 'Advanced Web Development 2026',
-    instructor: 'Jane Doe',
-    progress: 45,
-    thumbnail: '',
-    category: 'Web Development',
-  },
-  {
-    id: 'course-2',
-    title: 'UI/UX Design Masterclass',
-    instructor: 'Alex Smith',
-    progress: 12,
-    thumbnail: '',
-    category: 'System Design',
-  },
-];
 
 const MyCourses: React.FC = () => {
   const [courses, setCourses] = useState<any[]>([]);
@@ -31,14 +12,14 @@ const MyCourses: React.FC = () => {
   useEffect(() => {
     const fetchCourses = async () => {
       try {
-        const response = await getStudentDashboard();
-        if (response.success && response.data.enrolledCourses) {
-          setCourses(response.data.enrolledCourses);
-        } else if (!response.success) {
+        const response = await getMyEnrolledCourses();
+        if (response.success) {
+          setCourses(response.data);
+        } else {
           toast.error(response.error || 'Failed to fetch enrolled courses');
         }
-      } catch (error) {
-        toast.error('Failed to fetch enrolled courses');
+      } catch (error: any) {
+        toast.error(error?.response?.data?.error || 'Failed to fetch enrolled courses');
       } finally {
         setLoading(false);
       }
@@ -75,11 +56,20 @@ const MyCourses: React.FC = () => {
             <p className="font-semibold text-white mb-1">No enrolled courses</p>
             <p className="text-sm" style={{ color: 'rgba(255,255,255,0.4)' }}>You haven't enrolled in any courses yet.</p>
           </div>
+          <Link
+            to="/courses"
+            className="flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-semibold text-white transition-all hover:-translate-y-0.5"
+            style={{ background: 'linear-gradient(135deg,#3b82f6,#8b5cf6)' }}
+          >
+            Browse Courses
+          </Link>
         </div>
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {courses.map((course) => (
-            <div key={course._id} className="rounded-2xl overflow-hidden flex flex-col transition-all duration-300 hover:-translate-y-1"
+            <div
+              key={course._id}
+              className="rounded-2xl overflow-hidden flex flex-col transition-all duration-300 hover:-translate-y-1"
               style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.08)' }}
               onMouseEnter={e => (e.currentTarget.style.background = 'rgba(255,255,255,0.06)')}
               onMouseLeave={e => (e.currentTarget.style.background = 'rgba(255,255,255,0.04)')}
@@ -92,27 +82,39 @@ const MyCourses: React.FC = () => {
                     <PlayCircle size={40} style={{ color: 'rgba(255,255,255,0.3)' }} />
                   </div>
                 )}
-                <div className="absolute top-3 left-3 px-2 py-1 rounded-md text-xs font-semibold backdrop-blur-md"
-                  style={{ background: 'rgba(0,0,0,0.5)', color: 'white' }}>
-                  {course.category}
-                </div>
+                {course.category && (
+                  <div className="absolute top-3 left-3 px-2 py-1 rounded-md text-xs font-semibold backdrop-blur-md"
+                    style={{ background: 'rgba(0,0,0,0.5)', color: 'white' }}>
+                    {course.category}
+                  </div>
+                )}
+                {course.status === 'completed' && (
+                  <div className="absolute top-3 right-3 flex items-center gap-1 px-2 py-1 rounded-md text-xs font-semibold"
+                    style={{ background: 'rgba(34,197,94,0.25)', color: '#4ade80', border: '1px solid rgba(34,197,94,0.35)' }}>
+                    <CheckCircle size={12} /> Completed
+                  </div>
+                )}
               </div>
-              
+
               <div className="p-5 flex-1 flex flex-col">
                 <h3 className="font-semibold text-white text-lg line-clamp-2 mb-1">{course.title}</h3>
                 <p className="text-sm mb-4" style={{ color: 'rgba(255,255,255,0.45)' }}>by {course.instructor}</p>
-                
+
                 <div className="mt-auto space-y-3">
                   <div className="flex justify-between items-end mb-1 text-xs">
                     <span style={{ color: 'rgba(255,255,255,0.7)' }}>Overall Progress</span>
                     <span className="font-semibold" style={{ color: '#8b5cf6' }}>{course.progress}%</span>
                   </div>
                   <div className="w-full h-2 rounded-full overflow-hidden" style={{ background: 'rgba(255,255,255,0.1)' }}>
-                    <div className="h-full rounded-full transition-all duration-500"
-                      style={{ width: `${course.progress}%`, background: 'linear-gradient(90deg, #3b82f6, #8b5cf6)' }} />
+                    <div
+                      className="h-full rounded-full transition-all duration-500"
+                      style={{ width: `${course.progress}%`, background: 'linear-gradient(90deg, #3b82f6, #8b5cf6)' }}
+                    />
                   </div>
-                  
-                  <Link to={`/student/courses/${course._id}`} className="mt-4 w-full flex items-center justify-center gap-2 py-2.5 rounded-xl text-sm font-semibold transition-all"
+
+                  <Link
+                    to={`/courses/${course._id}`}
+                    className="mt-4 w-full flex items-center justify-center gap-2 py-2.5 rounded-xl text-sm font-semibold transition-all"
                     style={{ background: 'rgba(255,255,255,0.06)', color: 'white', border: '1px solid rgba(255,255,255,0.1)' }}
                     onMouseEnter={e => { e.currentTarget.style.background = 'rgba(255,255,255,0.1)'; }}
                     onMouseLeave={e => { e.currentTarget.style.background = 'rgba(255,255,255,0.06)'; }}

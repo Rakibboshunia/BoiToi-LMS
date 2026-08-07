@@ -1,183 +1,346 @@
-import React, { useState } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
-import { Lock, ShieldCheck, CreditCard, CheckCircle } from 'lucide-react';
-import { motion } from 'framer-motion';
-
-// Mock course data – in production fetched via getCourse(courseId)
-const mockCourse = {
-  title: 'Complete Web Development Bootcamp',
-  price: 49.99,
-  thumbnail: '',
-  teacher: { name: 'John Doe' },
-  totalLessons: 120,
-};
+import React, { useState, useEffect } from 'react';
+import { useNavigate, useParams, Link } from 'react-router-dom';
+import { useQuery } from '@tanstack/react-query';
+import { motion, AnimatePresence } from 'framer-motion';
+import { 
+  Lock, ShieldCheck, CreditCard, CheckCircle, 
+  ArrowLeft, Star, Clock, Award, PlayCircle, 
+  Zap, Tag, GraduationCap
+} from 'lucide-react';
+import { getCourse } from '../services/courseApi';
 
 const Checkout: React.FC = () => {
   const { courseId } = useParams();
   const navigate = useNavigate();
   const [isProcessing, setIsProcessing] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
+  const [coupon, setCoupon] = useState('');
+  const [couponApplied, setCouponApplied] = useState(false);
+
+  // Fetch the real course data
+  const { data, isLoading } = useQuery({
+    queryKey: ['course', courseId],
+    queryFn: () => getCourse(courseId as string),
+    enabled: !!courseId,
+  });
+  const course = data?.data;
+
+  const discount = couponApplied ? (course?.price || 0) * 0.2 : 0;
+  const total = (course?.price || 0) - discount;
+
+  const handleCoupon = () => {
+    if (coupon.trim().toUpperCase() === 'LEARN20') {
+      setCouponApplied(true);
+    }
+  };
 
   const handlePayment = (e: React.FormEvent) => {
     e.preventDefault();
     setIsProcessing(true);
-    // Simulate payment gateway call
     setTimeout(() => {
       setIsProcessing(false);
       setIsSuccess(true);
     }, 2500);
   };
 
+  // Success screen
   if (isSuccess) {
     return (
-      <div className="min-h-screen bg-secondary/30 flex items-center justify-center p-4">
+      <div className="min-h-screen bg-slate-950 flex items-center justify-center p-6">
         <motion.div
-          initial={{ scale: 0.9, opacity: 0 }}
+          initial={{ scale: 0.8, opacity: 0 }}
           animate={{ scale: 1, opacity: 1 }}
-          className="bg-background border border-border rounded-2xl p-12 shadow-xl text-center max-w-md w-full"
+          transition={{ type: 'spring', stiffness: 200 }}
+          className="bg-slate-900 border border-slate-700 rounded-3xl p-12 shadow-2xl text-center max-w-lg w-full"
         >
-          <div className="w-20 h-20 bg-green-100 text-green-600 rounded-full flex items-center justify-center mx-auto mb-6">
-            <CheckCircle size={40} />
-          </div>
-          <h2 className="text-2xl font-bold text-foreground mb-2">Enrollment Successful!</h2>
-          <p className="text-muted-foreground mb-8">
-            You now have full access to <span className="font-semibold text-foreground">{mockCourse.title}</span>.
-          </p>
-          <button
-            onClick={() => navigate('/student/dashboard')}
-            className="w-full py-3 bg-primary text-primary-foreground rounded-xl font-bold hover:opacity-90 transition"
+          <motion.div
+            initial={{ scale: 0 }}
+            animate={{ scale: 1 }}
+            transition={{ delay: 0.2, type: 'spring', stiffness: 300 }}
+            className="w-24 h-24 bg-gradient-to-br from-emerald-500 to-green-400 rounded-full flex items-center justify-center mx-auto mb-8 shadow-lg shadow-emerald-500/30"
           >
-            Go to Dashboard
-          </button>
+            <CheckCircle size={48} className="text-white" strokeWidth={2.5} />
+          </motion.div>
+          <motion.h2
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.3 }}
+            className="text-3xl font-extrabold text-white mb-3"
+          >
+            You're Enrolled! 🎉
+          </motion.h2>
+          <motion.p
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.4 }}
+            className="text-slate-400 mb-10 text-lg leading-relaxed"
+          >
+            You now have full lifetime access to{' '}
+            <span className="text-white font-semibold">"{course?.title}"</span>.
+            Let's start learning!
+          </motion.p>
+          <motion.button
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.5 }}
+            onClick={() => navigate('/student/dashboard')}
+            className="w-full py-4 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white rounded-xl font-bold text-lg transition-all hover:-translate-y-1 shadow-lg shadow-blue-600/25 flex items-center justify-center gap-2"
+          >
+            <PlayCircle size={22} /> Go to My Learning
+          </motion.button>
         </motion.div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-secondary/30 flex items-center justify-center p-4">
-      <div className="w-full max-w-4xl grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
+    <div className="min-h-screen bg-slate-950 text-slate-50 selection:bg-blue-500/30">
+      {/* Subtle top gradient */}
+      <div className="fixed top-0 left-0 right-0 h-[400px] bg-gradient-to-b from-blue-950/30 to-transparent pointer-events-none" />
+      <div className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[900px] h-[400px] bg-blue-600/5 blur-[150px] rounded-full pointer-events-none" />
 
-        {/* Order Summary */}
-        <div className="bg-background border border-border rounded-2xl p-6 shadow-sm space-y-6 lg:sticky lg:top-8">
-          <h2 className="text-lg font-bold text-foreground">Order Summary</h2>
+      {/* Navbar */}
+      <nav className="relative z-10 border-b border-slate-800/50 bg-slate-950/80 backdrop-blur-md py-4 px-6 lg:px-12">
+        <div className="container mx-auto flex items-center justify-between">
+          <Link to="/" className="flex items-center bg-white px-3 py-1.5 rounded-xl">
+            <img src="/logo.png" alt="BoiToi" className="h-8 object-contain" />
+          </Link>
+          <Link
+            to={`/courses/${courseId}`}
+            className="flex items-center gap-2 text-sm font-medium text-slate-400 hover:text-white transition-colors"
+          >
+            <ArrowLeft size={16} /> Back to Course
+          </Link>
+        </div>
+      </nav>
 
-          <div className="flex gap-4 items-start pb-6 border-b border-border">
-            <div className="w-20 h-16 bg-secondary rounded-xl overflow-hidden shrink-0">
-              {mockCourse.thumbnail ? (
-                <img src={mockCourse.thumbnail} alt={mockCourse.title} className="w-full h-full object-cover" />
-              ) : (
-                <div className="w-full h-full flex items-center justify-center text-muted-foreground text-xs">No img</div>
-              )}
-            </div>
-            <div>
-              <h3 className="font-semibold text-foreground leading-snug">{mockCourse.title}</h3>
-              <p className="text-sm text-muted-foreground mt-1">By {mockCourse.teacher.name}</p>
-              <p className="text-xs text-muted-foreground">{mockCourse.totalLessons} lessons · Lifetime access</p>
-            </div>
-          </div>
-
-          <div className="space-y-3 text-sm">
-            <div className="flex justify-between text-muted-foreground">
-              <span>Original Price</span>
-              <span>${mockCourse.price}</span>
-            </div>
-            <div className="flex justify-between text-green-600 font-medium">
-              <span>Discount (–)</span>
-              <span>–$0.00</span>
-            </div>
-            <div className="flex justify-between font-bold text-lg text-foreground border-t border-border pt-3">
-              <span>Total</span>
-              <span>${mockCourse.price}</span>
-            </div>
-          </div>
-
-          <div className="flex items-center gap-2 text-xs text-muted-foreground">
-            <ShieldCheck size={16} className="text-green-600 shrink-0" />
-            <span>30-Day Money-Back Guarantee. Safe &amp; Secure Checkout.</span>
-          </div>
+      <div className="relative z-10 container mx-auto px-4 py-12 max-w-5xl">
+        <div className="mb-10">
+          <h1 className="text-3xl font-extrabold text-white mb-2">Complete Your Enrollment</h1>
+          <p className="text-slate-400">You're one step away from unlocking full access.</p>
         </div>
 
-        {/* Payment Form */}
-        <div className="bg-background border border-border rounded-2xl p-6 shadow-sm">
-          <h2 className="text-lg font-bold text-foreground mb-6 flex items-center gap-2">
-            <CreditCard size={20} />
-            Payment Details
-          </h2>
+        <div className="grid grid-cols-1 lg:grid-cols-5 gap-8 items-start">
+          {/* Payment Form – 3 columns */}
+          <div className="lg:col-span-3 space-y-6">
+            {/* Card form */}
+            <div className="bg-slate-900 border border-slate-800 rounded-3xl p-8 shadow-xl">
+              <h2 className="text-xl font-bold text-white mb-8 flex items-center gap-3">
+                <span className="w-8 h-8 rounded-full bg-blue-600 text-white text-sm font-bold flex items-center justify-center">1</span>
+                Payment Details
+              </h2>
 
-          <form onSubmit={handlePayment} className="space-y-5">
-            <div>
-              <label className="block text-sm font-medium mb-1.5">Card Holder Name</label>
-              <input
-                required
-                type="text"
-                placeholder="John Doe"
-                className="w-full px-4 py-3 border border-input rounded-xl focus:ring-2 focus:ring-primary focus:outline-none"
-              />
+              <form onSubmit={handlePayment} className="space-y-5">
+                <div>
+                  <label className="block text-sm font-medium text-slate-300 mb-2">Card Holder Name</label>
+                  <input
+                    required
+                    type="text"
+                    placeholder="John Doe"
+                    className="w-full px-4 py-3.5 bg-slate-800/80 border border-slate-700 text-white placeholder-slate-500 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 focus:outline-none transition-colors"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-slate-300 mb-2">Card Number</label>
+                  <div className="relative">
+                    <input
+                      required
+                      type="text"
+                      maxLength={19}
+                      placeholder="1234 5678 9012 3456"
+                      className="w-full px-4 py-3.5 bg-slate-800/80 border border-slate-700 text-white placeholder-slate-500 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 focus:outline-none transition-colors pr-14"
+                    />
+                    <div className="absolute right-4 top-1/2 -translate-y-1/2 flex gap-1">
+                      <div className="w-6 h-4 bg-red-500 rounded-sm opacity-80" />
+                      <div className="w-6 h-4 bg-yellow-400 rounded-sm opacity-80 -ml-2" />
+                    </div>
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-sm font-medium text-slate-300 mb-2">Expiry Date</label>
+                    <input
+                      required
+                      type="text"
+                      placeholder="MM / YY"
+                      maxLength={7}
+                      className="w-full px-4 py-3.5 bg-slate-800/80 border border-slate-700 text-white placeholder-slate-500 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 focus:outline-none transition-colors"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-slate-300 mb-2">CVV</label>
+                    <input
+                      required
+                      type="password"
+                      placeholder="•••"
+                      maxLength={4}
+                      className="w-full px-4 py-3.5 bg-slate-800/80 border border-slate-700 text-white placeholder-slate-500 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 focus:outline-none transition-colors"
+                    />
+                  </div>
+                </div>
+
+                {/* Coupon */}
+                <div className="pt-4 border-t border-slate-800">
+                  <label className="block text-sm font-medium text-slate-300 mb-2 flex items-center gap-2">
+                    <Tag size={14} /> Coupon Code <span className="text-slate-500 text-xs font-normal">(try: LEARN20)</span>
+                  </label>
+                  <div className="flex gap-3">
+                    <input
+                      type="text"
+                      placeholder="Enter coupon code"
+                      value={coupon}
+                      onChange={e => setCoupon(e.target.value)}
+                      disabled={couponApplied}
+                      className="flex-1 px-4 py-3 bg-slate-800/80 border border-slate-700 text-white placeholder-slate-500 rounded-xl focus:ring-2 focus:ring-blue-500 focus:outline-none transition-colors disabled:opacity-50"
+                    />
+                    <button
+                      type="button"
+                      onClick={handleCoupon}
+                      disabled={couponApplied}
+                      className="px-5 py-3 bg-slate-700 hover:bg-slate-600 text-white rounded-xl font-semibold transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                    >
+                      {couponApplied ? '✓ Applied' : 'Apply'}
+                    </button>
+                  </div>
+                  <AnimatePresence>
+                    {couponApplied && (
+                      <motion.p
+                        initial={{ opacity: 0, y: -8 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0 }}
+                        className="mt-2 text-emerald-400 text-sm font-medium flex items-center gap-1"
+                      >
+                        <CheckCircle size={14} /> 20% discount applied!
+                      </motion.p>
+                    )}
+                  </AnimatePresence>
+                </div>
+
+                <button
+                  type="submit"
+                  disabled={isProcessing}
+                  className="w-full py-4 mt-2 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 disabled:opacity-70 text-white rounded-xl font-bold text-lg transition-all hover:-translate-y-1 shadow-lg shadow-blue-600/30 flex items-center justify-center gap-3"
+                >
+                  {isProcessing ? (
+                    <>
+                      <span className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                      Processing Payment…
+                    </>
+                  ) : (
+                    <>
+                      <Lock size={18} />
+                      Pay ${total.toFixed(2)} — Enroll Now
+                    </>
+                  )}
+                </button>
+
+                <p className="text-xs text-center text-slate-500 flex items-center justify-center gap-1.5">
+                  <ShieldCheck size={14} className="text-emerald-400" />
+                  256-bit SSL encryption · Your payment is 100% secure
+                </p>
+              </form>
             </div>
+          </div>
 
-            <div>
-              <label className="block text-sm font-medium mb-1.5">Card Number</label>
-              <div className="relative">
-                <input
-                  required
-                  type="text"
-                  maxLength={19}
-                  placeholder="1234 5678 9012 3456"
-                  className="w-full px-4 py-3 border border-input rounded-xl focus:ring-2 focus:ring-primary focus:outline-none pr-12"
-                />
-                <CreditCard className="absolute right-4 top-1/2 -translate-y-1/2 text-muted-foreground" size={18} />
-              </div>
-            </div>
-
-            <div className="grid grid-cols-2 gap-4">
-              <div>
-                <label className="block text-sm font-medium mb-1.5">Expiry Date</label>
-                <input
-                  required
-                  type="text"
-                  placeholder="MM / YY"
-                  maxLength={7}
-                  className="w-full px-4 py-3 border border-input rounded-xl focus:ring-2 focus:ring-primary focus:outline-none"
-                />
-              </div>
-              <div>
-                <label className="block text-sm font-medium mb-1.5">CVV</label>
-                <input
-                  required
-                  type="password"
-                  placeholder="•••"
-                  maxLength={4}
-                  className="w-full px-4 py-3 border border-input rounded-xl focus:ring-2 focus:ring-primary focus:outline-none"
-                />
-              </div>
-            </div>
-
-            <button
-              type="submit"
-              disabled={isProcessing}
-              className="w-full py-4 bg-primary text-primary-foreground rounded-xl font-bold text-base hover:opacity-90 transition flex items-center justify-center gap-2 disabled:opacity-70"
-            >
-              {isProcessing ? (
-                <>
-                  <span className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
-                  Processing…
-                </>
+          {/* Order Summary – 2 columns */}
+          <div className="lg:col-span-2 space-y-5 lg:sticky lg:top-8">
+            {/* Course info */}
+            <div className="bg-slate-900 border border-slate-800 rounded-3xl overflow-hidden shadow-xl">
+              {isLoading ? (
+                <div className="p-8 flex items-center justify-center">
+                  <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-blue-500" />
+                </div>
               ) : (
                 <>
-                  <Lock size={18} />
-                  Pay ${mockCourse.price}
+                  <div className="aspect-video bg-slate-800 relative">
+                    {course?.thumbnail ? (
+                      <img src={course.thumbnail} alt={course.title} className="w-full h-full object-cover" />
+                    ) : (
+                      <div className="w-full h-full flex items-center justify-center">
+                        <GraduationCap size={48} className="text-slate-600" />
+                      </div>
+                    )}
+                    <div className="absolute inset-0 bg-gradient-to-t from-slate-900/90 to-transparent" />
+                    <div className="absolute bottom-4 left-4 right-4">
+                      <p className="text-xs text-blue-400 font-medium uppercase tracking-wider mb-1">{course?.category}</p>
+                    </div>
+                  </div>
+                  <div className="p-6 space-y-5">
+                    <h3 className="font-bold text-white text-lg leading-snug">{course?.title}</h3>
+                    <div className="flex items-center gap-4 text-sm text-slate-400">
+                      <span className="flex items-center gap-1">
+                        <Star size={14} className="text-yellow-500" fill="currentColor" />
+                        {course?.rating?.average?.toFixed(1) || '4.8'}
+                      </span>
+                      <span className="flex items-center gap-1">
+                        <Clock size={14} /> {course?.totalDuration || '12'} hrs
+                      </span>
+                      <span className="flex items-center gap-1 capitalize">
+                        <Award size={14} /> {course?.level}
+                      </span>
+                    </div>
+                    <div className="text-sm text-slate-400">
+                      By <span className="text-slate-200 font-medium">{course?.teacher?.name}</span>
+                    </div>
+                  </div>
                 </>
               )}
-            </button>
+            </div>
 
-            <p className="text-xs text-center text-muted-foreground flex items-center justify-center gap-1">
-              <ShieldCheck size={13} className="text-green-600" />
-              Your payment is encrypted and secure.
-            </p>
-          </form>
+            {/* Price Breakdown */}
+            <div className="bg-slate-900 border border-slate-800 rounded-3xl p-6 space-y-4">
+              <h3 className="font-bold text-white text-base">Order Summary</h3>
+              <div className="space-y-3 text-sm">
+                <div className="flex justify-between text-slate-400">
+                  <span>Course Price</span>
+                  <span className="text-white font-medium">${course?.price?.toFixed(2) || '0.00'}</span>
+                </div>
+                {couponApplied && (
+                  <motion.div
+                    initial={{ opacity: 0, x: 10 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    className="flex justify-between text-emerald-400 font-medium"
+                  >
+                    <span>Coupon (LEARN20)</span>
+                    <span>–${discount.toFixed(2)}</span>
+                  </motion.div>
+                )}
+                <div className="flex justify-between font-bold text-xl text-white border-t border-slate-800 pt-4">
+                  <span>Total</span>
+                  <span className="text-emerald-400">${total.toFixed(2)}</span>
+                </div>
+              </div>
+              <div className="flex items-start gap-2 text-xs text-slate-400 bg-slate-800/50 rounded-xl p-3 mt-2">
+                <ShieldCheck size={14} className="text-emerald-400 mt-0.5 shrink-0" />
+                <span>30-Day Money-Back Guarantee. No questions asked.</span>
+              </div>
+            </div>
+
+            {/* What you get */}
+            <div className="bg-slate-900 border border-slate-800 rounded-3xl p-6">
+              <h4 className="font-bold text-white mb-4 text-sm uppercase tracking-wider">Included in this plan</h4>
+              <ul className="space-y-3 text-sm text-slate-300">
+                {[
+                  'Lifetime access to all materials',
+                  'Live interactive sessions',
+                  'Quizzes & Assignments',
+                  'Downloadable resources',
+                  'Certificate of completion',
+                  'Community Q&A support',
+                ].map((item, i) => (
+                  <li key={i} className="flex items-center gap-3">
+                    <div className="w-5 h-5 rounded-full bg-emerald-500/20 flex items-center justify-center shrink-0">
+                      <CheckCircle size={12} className="text-emerald-400" />
+                    </div>
+                    {item}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </div>
         </div>
-
       </div>
     </div>
   );

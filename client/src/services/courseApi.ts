@@ -1,6 +1,6 @@
 import api from './api';
 
-export const getCourses = async (params = {}) => {
+export const getCourses = async (params: { search?: string; category?: string; level?: string } = {}) => {
   const response = await api.get('/courses', { params });
   return response.data;
 };

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { NavLink, Outlet, useNavigate } from 'react-router-dom';
+import { NavLink, Outlet, useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import { 
   Menu, X, LogOut, User as UserIcon, BookOpen, 
@@ -89,12 +89,11 @@ export const DashboardLayout: React.FC = () => {
       >
         {/* Logo */}
         <div className="h-16 flex items-center justify-between px-5 border-b border-slate-800">
-          <div className="flex items-center gap-2.5">
-            <div className={cn("w-7 h-7 rounded-lg bg-gradient-to-br flex items-center justify-center", accent)}>
-              <ShieldCheck size={15} className="text-white" />
+          <Link to="/" className="flex items-center hover:opacity-80 transition-opacity">
+            <div className="bg-white px-3 py-1.5 rounded-xl shadow-md flex items-center">
+              <img src="/logo.png" alt="BoiToi Logo" className="h-7 w-auto object-contain" />
             </div>
-            <span className="text-base font-bold text-slate-100">LMS Platform</span>
-          </div>
+          </Link>
           <button 
             className="lg:hidden text-slate-400 hover:text-slate-200 transition-colors"
             onClick={() => setSidebarOpen(false)}

@@ -56,42 +56,16 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   }, []);
 
   const login = async (credentials: any) => {
-    // =============================================
-    // 🚧 FAKE LOGIN BYPASS — Testing Only
-    // যেকোনো email ও password দিলেই login হবে।
-    // email-এ 'teacher' থাকলে teacher role, নাহলে student।
-    // Production-এ এই block টি সরিয়ে নিচের real API call uncomment করুন।
-    // =============================================
-    const isTeacher = credentials.email?.toLowerCase().includes('teacher');
-    const fakeUser: User = {
-      _id: 'fake-user-001',
-      name: isTeacher ? 'Test Teacher' : 'Test Student',
-      email: credentials.email,
-      role: isTeacher ? 'teacher' : 'student',
-      avatar: undefined,
-      isActive: true,
-      isApproved: isTeacher ? true : undefined,
-    };
-    const fakeToken = 'fake-access-token-for-testing';
-    localStorage.setItem('accessToken', fakeToken);
-    localStorage.setItem('refreshToken', 'fake-refresh-token-for-testing');
-    localStorage.setItem('user', JSON.stringify(fakeUser));
-    setUser(fakeUser);
-    setIsAuthenticated(true);
-    return { success: true, user: fakeUser };
-    // =============================================
-    // ✅ Real API call (uncomment for production):
-    // const res = await api.post('/auth/login', credentials);
-    // if (res.data.success) {
-    //   const { accessToken, refreshToken, user: userData } = res.data;
-    //   localStorage.setItem('accessToken', accessToken);
-    //   localStorage.setItem('refreshToken', refreshToken);
-    //   localStorage.setItem('user', JSON.stringify(userData));
-    //   setUser(userData);
-    //   setIsAuthenticated(true);
-    // }
-    // return res.data;
-    // =============================================
+    const res = await api.post('/auth/login', credentials);
+    if (res.data.success) {
+      const { accessToken, refreshToken, user: userData } = res.data;
+      localStorage.setItem('accessToken', accessToken);
+      localStorage.setItem('refreshToken', refreshToken);
+      localStorage.setItem('user', JSON.stringify(userData));
+      setUser(userData);
+      setIsAuthenticated(true);
+    }
+    return res.data;
   };
 
   const register = async (userData: any) => {
