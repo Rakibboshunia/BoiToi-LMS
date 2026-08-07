@@ -13,7 +13,7 @@ const registerSchema = z.object({
   password: z.string().min(8, { message: "Password must be at least 8 characters" }),
   confirmPassword: z.string(),
   role: z.enum(['student', 'teacher'], {
-    required_error: "Please select an account type",
+    error: "Please select an account type",
   }),
 }).refine((data) => data.password === data.confirmPassword, {
   message: "Passwords don't match",
