@@ -1,3 +1,4 @@
+
 const mongoose = require("mongoose");
 
 const enrollmentSchema = new mongoose.Schema(
@@ -47,6 +48,7 @@ const enrollmentSchema = new mongoose.Schema(
     timestamps: true,
   }
 );
+
 
 // Unique enrollment per student per course
 enrollmentSchema.index({ student: 1, course: 1 }, { unique: true });
