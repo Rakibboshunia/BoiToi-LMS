@@ -1,3 +1,4 @@
+
 const mongoose = require("mongoose");
 
 const submissionSchema = new mongoose.Schema(
@@ -54,5 +55,4 @@ const submissionSchema = new mongoose.Schema(
 );
 
 submissionSchema.index({ assignment: 1, student: 1 }, { unique: true });
-
 module.exports = mongoose.model("Submission", submissionSchema);
