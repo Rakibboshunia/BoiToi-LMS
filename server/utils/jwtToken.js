@@ -1,3 +1,4 @@
+
 const jwt = require("jsonwebtoken");
 
 // Generate access and refresh tokens
@@ -35,5 +36,6 @@ const sendTokenResponse = async (user, statusCode, res) => {
     user,
   });
 };
+
 
 module.exports = { generateTokens, sendTokenResponse };
