@@ -1,3 +1,4 @@
+
 const socketIo = require("socket.io");
 const jwt = require("jsonwebtoken");
 
@@ -38,7 +39,7 @@ const initSocket = (server) => {
       io.emit("online_users", Array.from(onlineUsers.keys()));
     }
 
-    // ─── Course room ────────────────────────────────────────────────
+    // ─── Course room ──────
     socket.on("join_course", (courseId) => {
       socket.join(`course_${courseId}`);
     });
@@ -47,7 +48,7 @@ const initSocket = (server) => {
       socket.leave(`course_${courseId}`);
     });
 
-    // ─── Live class ──────────────────────────────────────────────────
+    // ─── Live class ─────────
     socket.on("join_live_class", (roomId) => {
       socket.join(`live_${roomId}`);
       socket.to(`live_${roomId}`).emit("user_joined_live", { userId, socketId: socket.id });
@@ -58,7 +59,7 @@ const initSocket = (server) => {
       socket.leave(`live_${roomId}`);
     });
 
-    // ─── Live class chat ─────────────────────────────────────────────
+    // ─── Live class chat ───
     socket.on("live_message", ({ roomId, message }) => {
       io.to(`live_${roomId}`).emit("live_message", {
         userId,
@@ -68,7 +69,7 @@ const initSocket = (server) => {
       });
     });
 
-    // ─── Course discussion / messages ────────────────────────────────
+    // ─── Course discussion / messages ──────
     socket.on("course_message", ({ courseId, message }) => {
       io.to(`course_${courseId}`).emit("course_message", {
         userId,
@@ -78,7 +79,7 @@ const initSocket = (server) => {
       });
     });
 
-    // ─── Typing indicators ────────────────────────────────────────────
+    // ─── Typing indicators ───────
     socket.on("typing_start", ({ roomId }) => {
       socket.to(roomId).emit("typing_start", { userId, userName: socket.user?.name });
     });
@@ -87,7 +88,7 @@ const initSocket = (server) => {
       socket.to(roomId).emit("typing_stop", { userId });
     });
 
-    // ─── Disconnect ───────────────────────────────────────────────────
+    // ─── Disconnect ─────
     socket.on("disconnect", () => {
       onlineUsers.delete(userId);
       io.emit("online_users", Array.from(onlineUsers.keys()));
