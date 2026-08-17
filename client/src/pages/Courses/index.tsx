@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect, useMemo } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { Link, useSearchParams } from 'react-router-dom';
@@ -192,6 +193,7 @@ const CourseCatalog: React.FC = () => {
                 </div>
               </div>
 
+              
               <div className="space-y-4">
                 <h3 className="font-semibold text-slate-300">Level</h3>
                 <div className="space-y-3 text-sm text-slate-400">
@@ -211,6 +213,7 @@ const CourseCatalog: React.FC = () => {
                   ))}
                 </div>
               </div>
+
               
               <div className="space-y-4">
                 <h3 className="font-semibold text-slate-300">Price</h3>
@@ -235,6 +238,7 @@ const CourseCatalog: React.FC = () => {
           </div>
         </div>
 
+        
         {/* Course Grid */}
         <div className="flex-1">
           <div className="mb-8 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
@@ -306,6 +310,7 @@ const CourseCatalog: React.FC = () => {
                           <BookOpen size={40} className="text-white/10" />
                         </div>
                       )}
+                      
                       {/* Overlay badges */}
                       <div className="absolute top-3 left-3 bg-black/60 backdrop-blur-md px-3 py-1 rounded-full text-xs font-semibold text-white border border-white/10">
                         {course.category}
