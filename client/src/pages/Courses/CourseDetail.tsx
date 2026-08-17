@@ -1,12 +1,15 @@
+
 import React, { useState, useEffect } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import { motion } from 'framer-motion';
+
 import { 
   PlayCircle, Clock, Award, Star, CheckCircle, Users, ArrowRight,
   Lock, BookOpen, ArrowLeft, Video, 
   MonitorPlay, FileText, Download 
 } from 'lucide-react';
+
 import { getCourse } from '../../services/courseApi';
 import { useAuth } from '../../context/AuthContext';
 
