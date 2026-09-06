@@ -1,4 +1,6 @@
+
 const jwt = require("jsonwebtoken");
+
 const User = require("../models/User");
 
 // Protect routes
@@ -36,6 +38,7 @@ exports.protect = async (req, res, next) => {
     return res.status(401).json({ success: false, error: "Not authorized to access this route" });
   }
 };
+
 
 // Grant access to specific roles
 exports.authorize = (...roles) => {
