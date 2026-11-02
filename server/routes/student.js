@@ -5,6 +5,7 @@ const {
   getMyLiveClasses,
   getMyAssignments,
 } = require("../controllers/studentController");
+
 const { protect, authorize } = require("../middleware/auth");
 
 const router = express.Router();
