@@ -1,4 +1,3 @@
-
 const jwt = require("jsonwebtoken");
 
 // Generate access and refresh tokens
@@ -18,11 +17,13 @@ const generateTokens = (id) => {
 const sendTokenResponse = async (user, statusCode, res) => {
   const { accessToken, refreshToken } = generateTokens(user._id);
 
+  
   // Save refresh token in user document
   user.refreshToken = refreshToken;
   user.lastLogin = Date.now();
   await user.save({ validateBeforeSave: false });
 
+  
   // Remove password and tokens from output
   user.password = undefined;
   user.refreshToken = undefined;
