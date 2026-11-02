@@ -1,3 +1,4 @@
+
 const express = require("express");
 const { 
   getAdminStats, 
@@ -10,6 +11,7 @@ const {
   toggleCourseStatus,
   deleteCourse
 } = require("../controllers/adminController");
+
 const { protect, authorize } = require("../middleware/auth");
 
 const router = express.Router();
