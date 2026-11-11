@@ -1,3 +1,4 @@
+
 const socketIo = require("socket.io");
 const jwt = require("jsonwebtoken");
 
@@ -68,6 +69,7 @@ const initSocket = (server) => {
       });
     });
 
+    
     // ─── Course discussion / messages ──────
     socket.on("course_message", ({ courseId, message }) => {
       io.to(`course_${courseId}`).emit("course_message", {
@@ -78,6 +80,7 @@ const initSocket = (server) => {
       });
     });
 
+    
     // ─── Typing indicators ───────
     socket.on("typing_start", ({ roomId }) => {
       socket.to(roomId).emit("typing_start", { userId, userName: socket.user?.name });
@@ -87,6 +90,7 @@ const initSocket = (server) => {
       socket.to(roomId).emit("typing_stop", { userId });
     });
 
+    
     // ─── Disconnect ─────
     socket.on("disconnect", () => {
       onlineUsers.delete(userId);
