@@ -1,3 +1,4 @@
+
 const express = require("express");
 const { issueCertificate, getMyCertificates } = require("../controllers/certificateController");
 const { protect, authorize } = require("../middleware/auth");
