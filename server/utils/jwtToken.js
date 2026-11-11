@@ -1,3 +1,4 @@
+
 const jwt = require("jsonwebtoken");
 
 // Generate access and refresh tokens
@@ -22,7 +23,6 @@ const sendTokenResponse = async (user, statusCode, res) => {
   user.refreshToken = refreshToken;
   user.lastLogin = Date.now();
   await user.save({ validateBeforeSave: false });
-
   
   // Remove password and tokens from output
   user.password = undefined;
@@ -37,6 +37,5 @@ const sendTokenResponse = async (user, statusCode, res) => {
     user,
   });
 };
-
 
 module.exports = { generateTokens, sendTokenResponse };
