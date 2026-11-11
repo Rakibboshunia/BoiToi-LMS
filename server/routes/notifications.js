@@ -1,3 +1,4 @@
+
 const express = require("express");
 const { getNotifications, markAsRead, markAllAsRead } = require("../controllers/notificationController");
 const { protect } = require("../middleware/auth");
